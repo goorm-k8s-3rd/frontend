@@ -28,7 +28,10 @@ function Hero() {
 				<section className="section section-hero section-shaped">
 					{/* Background circles */}
 					<div className="shape shape-style-1 shape-default">
-						<img src={require('assets/img/theme/book1.jpg')} />
+						<img
+							src={require('assets/img/theme/book1.jpg')}
+							style={{ width: '100%', height: '100%' }}
+						/>
 					</div>
 					<Container className="shape-container d-flex align-items-center py-lg">
 						<div className="col px-0">
