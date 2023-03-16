@@ -22,11 +22,11 @@ import { useRecoilValue } from 'recoil';
 
 import myRouteInfo from 'routes.js';
 
-import { isLoggedIn } from 'recoils/user.js';
+import { userState } from 'recoils/user.js';
 
 function Admin() {
 	// const isMutating = useIsMutating();
-	const loginStatus = useRecoilValue(isLoggedIn);
+	// const loginStatus = useRecoilValue(isLoggedIn);
 
 	const getRoutes = routes => {
 		return routes.map((prop, key) => {
