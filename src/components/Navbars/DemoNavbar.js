@@ -162,16 +162,16 @@ function DemoNavbar() {
 										<span className="nav-link-inner--text">Examples</span>
 									</DropdownToggle>
 									<DropdownMenu>
-										<DropdownItem to="/landing-page" tag={Link}>
+										<DropdownItem to="/landing" tag={Link}>
 											Landing
 										</DropdownItem>
-										<DropdownItem to="/profile-page" tag={Link}>
+										<DropdownItem to="/profile" tag={Link}>
 											Profile
 										</DropdownItem>
-										<DropdownItem to="/login-page" tag={Link}>
+										<DropdownItem to="/login" tag={Link}>
 											Login
 										</DropdownItem>
-										<DropdownItem to="/register-page" tag={Link}>
+										<DropdownItem to="/register" tag={Link}>
 											Register
 										</DropdownItem>
 									</DropdownMenu>
@@ -179,17 +179,13 @@ function DemoNavbar() {
 							</Nav>
 							<Nav className="align-items-lg-center ml-lg-auto" navbar>
 								<NavItem className="d-none d-lg-block ml-lg-4">
-									<Button
-										className="btn-neutral btn-icon"
-										color="default"
-										href="/login-page"
-									>
+									<Button className="btn-neutral btn-icon" color="default" href="/login">
 										<span className="nav-link-inner--text">로그인</span>
 									</Button>
 									<Button
 										className="btn-neutral btn-icon"
 										color="default"
-										href="/register-page"
+										href="/register"
 									>
 										<span className="nav-link-inner--text">회원가입</span>
 									</Button>

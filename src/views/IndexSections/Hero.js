@@ -18,7 +18,7 @@
 import React from 'react';
 
 // reactstrap components
-import { Button, Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 function Hero() {
 	return (
@@ -36,12 +36,6 @@ function Hero() {
 								<Col className="text-center" lg="6">
 									<div style={{ paddingBottom: '60px' }}></div>
 									<h1 style={{ color: 'white' }}>Book Network</h1>
-									{/* <img
-											alt="..."
-											className="img-fluid"
-											src={require('assets/img/brand/argon-react-white.png')}
-											style={{ width: '200px' }}
-										/> */}
 									<p
 										style={{
 											fontSize: '1rem',
@@ -50,34 +44,6 @@ function Hero() {
 									>
 										책을 읽고 리뷰하는 공간으로 읽은 책을 찾고 리뷰를 남겨보세요!
 									</p>
-									{/* <div className="btn-wrapper mt-5">
-											<Button
-												className="btn-white btn-icon mb-3 mb-sm-0"
-												color="default"
-												href="https://www.creative-tim.com/product/argon-design-system-react?ref=adsr-landing-page"
-												size="lg"
-											>
-												<span className="btn-inner--icon mr-1">
-													<i className="ni ni-cloud-download-95" />
-												</span>
-												<span className="btn-inner--text">Download React</span>
-											</Button>{' '}
-											<Button
-												className="btn-icon mb-3 mb-sm-0"
-												color="github"
-												href="https://github.com/creativetimofficial/argon-design-system-react"
-												size="lg"
-												target="_blank"
-											>
-												<span className="btn-inner--icon mr-1">
-													<i className="fa fa-github" />
-												</span>
-												<span className="btn-inner--text">
-													<span className="text-warning mr-1">Star us</span>
-													on Github
-												</span>
-											</Button>
-										</div> */}
 									<div className="mt-5">
 										<small className="text-white font-weight-bold mb-0 mr-2">
 											&proudly coded by 3부상조
