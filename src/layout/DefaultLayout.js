@@ -26,12 +26,15 @@ import { userState } from 'recoils/user.js';
 
 function Admin() {
 	// const isMutating = useIsMutating();
-	// const loginStatus = useRecoilValue(isLoggedIn);
+	const { isLogin } = useRecoilValue(userState);
 
 	const getRoutes = routes => {
 		return routes.map((prop, key) => {
-			if (prop.isLoginRequired === true) {
+			if (prop.isLoginRequired && !isLogin) {
 				return <Redirect from={prop.path} to="/login" key={key}></Redirect>;
+			}
+			if (prop.isLogoutRequired && isLogin) {
+				return <Redirect from={prop.path} to="/" key={key}></Redirect>;
 			}
 			return (
 				<Route

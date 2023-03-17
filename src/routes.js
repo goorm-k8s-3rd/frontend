@@ -22,6 +22,7 @@ const dashboardRouteInfo = {
 		name: 'Login',
 		component: Login,
 		isLoginRequired: false,
+		isLogoutRequired: true,
 	},
 	profile: {
 		path: '/profile',
@@ -34,6 +35,7 @@ const dashboardRouteInfo = {
 		name: 'Register',
 		component: Register,
 		isLoginRequired: false,
+		isLogoutRequired: true,
 	},
 };
 

@@ -95,9 +95,9 @@ const FormDataView = memo(({ onChange }) => {
 const Login = memo(() => {
 	const mainRef = useRef(null);
 	const [currentUserState, setUserState] = useRecoilState(userState);
-	if (currentUserState) {
-		// eslint-disable-next-line no-restricted-globals
-		location.href = '/';
+
+	if (currentUserState.isLogin) {
+		window.location.href = '/';
 	}
 	const [userInfo, setUserInfo] = useState({
 		email: '',
