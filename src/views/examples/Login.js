@@ -37,7 +37,6 @@ import { useRecoilState } from 'recoil';
 
 // core components
 import DemoNavbar from 'components/Navbars/DemoNavbar.js';
-import SimpleFooter from 'components/Footers/SimpleFooter.js';
 import { userState } from 'recoils/user';
 
 const ErrorMessageView = memo(({ errorMessage }) => {
@@ -189,7 +188,6 @@ const Login = memo(() => {
 					</Container>
 				</section>
 			</main>
-			<SimpleFooter />
 		</>
 	);
 });

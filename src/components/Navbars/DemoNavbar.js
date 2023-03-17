@@ -71,8 +71,31 @@ const UserButtonView = () => {
 		}
 	};
 
+	const onClickSearch = () => {
+		window.location.href = '/search';
+	};
+
 	return isLogin ? (
 		<Nav className="navbar-nav-hover align-items-lg-center ml-lg-auto" navbar>
+			<i
+				className="ni ni-zoom-split-in"
+				style={{
+					color: 'white',
+					paddingRight: '3px',
+					cursor: 'pointer',
+				}}
+				onClick={onClickSearch}
+			/>
+			<span
+				className="nav-link-inner--text"
+				style={{
+					color: 'white',
+					cursor: 'pointer',
+				}}
+				onClick={onClickSearch}
+			>
+				_________
+			</span>
 			<UncontrolledDropdown nav>
 				<DropdownToggle nav>
 					<Button className="align-content-center">

@@ -23,6 +23,7 @@ import { useRecoilValue } from 'recoil';
 import myRouteInfo from 'routes.js';
 
 import { userState } from 'recoils/user.js';
+import SimpleFooter from 'components/Footers/SimpleFooter';
 
 function Admin() {
 	// const isMutating = useIsMutating();
@@ -49,6 +50,7 @@ function Admin() {
 	return (
 		<>
 			<Switch>{getRoutes(Object.values(myRouteInfo))}</Switch>
+			<SimpleFooter />
 		</>
 	);
 }
