@@ -40,7 +40,7 @@ import DemoNavbar from 'components/Navbars/DemoNavbar.js';
 import SimpleFooter from 'components/Footers/SimpleFooter.js';
 import { userState } from 'recoils/user';
 
-const ErrorMessageView = ({ errorMessage }) => {
+const ErrorMessageView = memo(({ errorMessage }) => {
 	if (!errorMessage) return null;
 	return (
 		<div className="text-muted font-italic">
@@ -50,7 +50,7 @@ const ErrorMessageView = ({ errorMessage }) => {
 			</small>
 		</div>
 	);
-};
+});
 
 const FormDataView = memo(({ onChange }) => {
 	return (

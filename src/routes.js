@@ -1,8 +1,9 @@
 import Index from 'views/Index.js';
-import Landing from 'views/examples/Landing.js';
+import Search from 'views/examples/Search.js';
 import Login from 'views/examples/Login.js';
 import Profile from 'views/examples/Profile.js';
 import Register from 'views/examples/Register.js';
+import ErrorPage from 'views/examples/404';
 
 const dashboardRouteInfo = {
 	index: {
@@ -10,12 +11,14 @@ const dashboardRouteInfo = {
 		name: 'Index',
 		component: Index,
 		isLoginRequired: false,
+		isLogoutRequired: false,
 	},
-	landing: {
-		path: '/landing',
-		name: 'Landing',
-		component: Landing,
+	search: {
+		path: '/search',
+		name: 'Search',
+		component: Search,
 		isLoginRequired: false,
+		isLogoutRequired: false,
 	},
 	login: {
 		path: '/login',
@@ -29,6 +32,7 @@ const dashboardRouteInfo = {
 		name: 'Profile',
 		component: Profile,
 		isLoginRequired: true,
+		isLogoutRequired: false,
 	},
 	register: {
 		path: '/register',
@@ -36,6 +40,13 @@ const dashboardRouteInfo = {
 		component: Register,
 		isLoginRequired: false,
 		isLogoutRequired: true,
+	},
+	errorPage: {
+		path: '/*',
+		name: 'Error Page',
+		component: ErrorPage,
+		isLoginRequired: false,
+		isLogoutRequired: false,
 	},
 };
 
