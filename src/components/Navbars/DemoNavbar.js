@@ -30,12 +30,74 @@ import {
 	Media,
 	NavbarBrand,
 	Navbar,
-	NavItem,
 	Nav,
 	Container,
 	Row,
 	Col,
 } from 'reactstrap';
+import { useRecoilState } from 'recoil';
+
+import { userState } from 'recoils/user.js';
+
+const UserButtonView = () => {
+	const [{ isLogin }, setUserState] = useRecoilState(userState);
+
+	const useUserLogin = async e => {
+		e.preventDefault();
+		try {
+			const promiseFunc = () => {
+				return new Promise((resolve, reject) => {
+					setTimeout(() => {
+						resolve({ code: 200 });
+						// reject({ code: 400, errorMessage: '에러내용' });
+					}, 1000);
+				});
+			};
+			await promiseFunc();
+
+			setUserState(oldState => ({
+				...oldState,
+				userId: '',
+				isLogin: false,
+				token: '',
+			}));
+		} catch (err) {
+			setUserState(oldState => ({
+				...oldState,
+				userId: '',
+				isLogin: false,
+				token: '',
+			}));
+		}
+	};
+
+	return isLogin ? (
+		<Nav className="navbar-nav-hover align-items-lg-center ml-lg-auto" navbar>
+			<UncontrolledDropdown nav>
+				<DropdownToggle nav>
+					<Button className="align-content-center">
+						<i className="ni ni-circle-08" />내 정보
+					</Button>
+				</DropdownToggle>
+				<DropdownMenu>
+					<DropdownItem to="/profile" tag={Link}>
+						프로필
+					</DropdownItem>
+					<DropdownItem onClick={useUserLogin}>로그아웃</DropdownItem>
+				</DropdownMenu>
+			</UncontrolledDropdown>
+		</Nav>
+	) : (
+		<Nav className="align-items-lg-center ml-lg-auto" navbar>
+			<Button className="btn-neutral btn-icon" color="default" href="/login">
+				<span className="nav-link-inner--text">로그인</span>
+			</Button>
+			<Button className="btn-neutral btn-icon" color="default" href="/register">
+				<span className="nav-link-inner--text">회원가입</span>
+			</Button>
+		</Nav>
+	);
+};
 
 function DemoNavbar() {
 	const [collapseClasses, setCollapseClasses] = useState('');
@@ -177,20 +239,7 @@ function DemoNavbar() {
 									</DropdownMenu>
 								</UncontrolledDropdown>
 							</Nav>
-							<Nav className="align-items-lg-center ml-lg-auto" navbar>
-								<NavItem className="d-none d-lg-block ml-lg-4">
-									<Button className="btn-neutral btn-icon" color="default" href="/login">
-										<span className="nav-link-inner--text">로그인</span>
-									</Button>
-									<Button
-										className="btn-neutral btn-icon"
-										color="default"
-										href="/register"
-									>
-										<span className="nav-link-inner--text">회원가입</span>
-									</Button>
-								</NavItem>
-							</Nav>
+							<UserButtonView />
 						</UncontrolledCollapse>
 					</Container>
 				</Navbar>
