@@ -21,6 +21,7 @@ import {
 
 // core components
 import DemoNavbar from 'components/Navbars/DemoNavbar.js';
+import PaginationComponent from 'components/Pagination/Pagination';
 
 const BookInfoViewList = ({ bookList }) => {
 	const ROW_PER_CARD_CNT = 4;
@@ -67,6 +68,7 @@ const BookInfoViewList = ({ bookList }) => {
 const Search = () => {
 	const mainRef = useRef(null);
 	const [bookList, setBookList] = useState([]);
+	const [curPage, setCurPage] = useState(1);
 
 	const onSubmitTitle = async () => {
 		try {
@@ -88,6 +90,31 @@ const Search = () => {
 			};
 			const result = await promiseFunc();
 			setBookList(result);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const onClickPagination = async num => {
+		try {
+			const promiseFunc = () => {
+				return new Promise(res => {
+					setTimeout(() => {
+						res(
+							Array.from({ length: 13 }, (_, i) => ({
+								title: `타이틀${i}`,
+								authors: `저자${i}`,
+								isbn: i,
+								thumbnail: 'https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg',
+								total_ratin: ((i + 1) / 3).toFixed(2),
+								star_cnt: Math.floor((i + 1) / 3),
+							})),
+						);
+					}, 1000);
+				});
+			};
+			await promiseFunc();
+			setCurPage(num);
 		} catch (e) {
 			console.log(e);
 		}
@@ -155,6 +182,12 @@ const Search = () => {
 						</Row>
 					</Container>
 				</section>
+				<PaginationComponent
+					curPage={curPage}
+					onClick={onClickPagination}
+					pageCnt={5}
+					maxCnt={11}
+				/>
 			</main>
 		</>
 	);
