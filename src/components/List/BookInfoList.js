@@ -1,7 +1,9 @@
 import React from 'react';
 import { Badge, Card, CardBody, CardImg, Col, Row } from 'reactstrap';
+import dashboardRouteInfo from 'routes';
 
 const BookInfoViewList = ({ bookList, rowPerCnt }) => {
+	const detailPath = dashboardRouteInfo.detail.path.split(':')[0];
 	return (
 		<>
 			{Array.from({ length: Math.ceil(bookList.length / rowPerCnt) }, (_, i) => {
@@ -15,7 +17,7 @@ const BookInfoViewList = ({ bookList, rowPerCnt }) => {
 										className="card-lift--hover shadow border-0"
 										style={{ cursor: 'pointer' }}
 										onClick={() => {
-											console.log(bookInfo.isbn);
+											window.location.href = `${detailPath}${bookInfo.isbn}`;
 										}}
 									>
 										<CardImg
