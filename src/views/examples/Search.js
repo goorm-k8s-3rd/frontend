@@ -4,10 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 
 // reactstrap components
 import {
-	Badge,
-	Card,
-	CardBody,
-	CardImg,
 	FormGroup,
 	Input,
 	InputGroupAddon,
@@ -22,48 +18,7 @@ import {
 // core components
 import DemoNavbar from 'components/Navbars/DemoNavbar.js';
 import PaginationComponent from 'components/Pagination/Pagination';
-
-const BookInfoViewList = ({ bookList }) => {
-	const ROW_PER_CARD_CNT = 4;
-	return (
-		<>
-			{Array.from({ length: Math.ceil(bookList.length / ROW_PER_CARD_CNT) }, (_, i) => {
-				return (
-					<Row key={`row${i}`} className="row-grid">
-						{bookList
-							.slice(i * ROW_PER_CARD_CNT, i * ROW_PER_CARD_CNT + ROW_PER_CARD_CNT)
-							.map((bookInfo, key) => (
-								<Col key={key} lg={Math.floor(12 / ROW_PER_CARD_CNT)}>
-									<Card
-										className="card-lift--hover shadow border-0"
-										style={{ cursor: 'pointer' }}
-										onClick={() => {
-											console.log(bookInfo.isbn);
-										}}
-									>
-										<CardImg
-											alt="..."
-											src={bookInfo.thumbnail}
-											style={{ height: '300px' }}
-											top
-										/>
-										<CardBody className="py-3">
-											<h6 className="text-primary text-uppercase">{bookInfo.title}</h6>
-											<div>
-												<Badge color="primary" pill className="mr-1">
-													Rating: {bookInfo.total_ratin}
-												</Badge>
-											</div>
-										</CardBody>
-									</Card>
-								</Col>
-							))}
-					</Row>
-				);
-			})}
-		</>
-	);
-};
+import BookInfoViewList from 'components/List/BookInfoList';
 
 const promiseFunc = (name, num) => {
 	return new Promise(res => {
@@ -164,7 +119,7 @@ const Search = () => {
 					<Container>
 						<Row className="justify-content-center">
 							<Col lg="12">
-								<BookInfoViewList bookList={bookList} />
+								<BookInfoViewList bookList={bookList} rowPerCnt={4} />
 							</Col>
 						</Row>
 					</Container>
