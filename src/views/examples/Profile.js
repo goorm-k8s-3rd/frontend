@@ -19,11 +19,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 // reactstrap components
 import {
-	Button,
 	Card,
 	Container,
-	Row,
-	Col,
 	Nav,
 	NavItem,
 	NavLink,
@@ -37,8 +34,9 @@ import {
 // core components
 import classNames from 'classnames';
 import DemoNavbar from 'components/Navbars/DemoNavbar';
+import BookInfoViewList from 'components/List/BookInfoList';
 
-const promiseFunc = () => {
+const reviewPromiseFunc = () => {
 	return new Promise(res => {
 		setTimeout(() => {
 			res(
@@ -56,22 +54,41 @@ const promiseFunc = () => {
 	});
 };
 
+const myInterestPromiseFunc = () => {
+	return new Promise(res => {
+		setTimeout(() => {
+			res(
+				Array.from({ length: 13 }, (_, i) => ({
+					title: `책이름1${i}`,
+					authors: `저자${i}`,
+					isbn: i,
+					thumbnail: 'https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg',
+					total_ratin: ((i + 1) / 3).toFixed(2),
+				})),
+			);
+		}, 1000);
+	});
+};
+
 const Profile = () => {
 	const mainRef = useRef(null);
 	const [tabs, setTabs] = useState(1);
 	const [reviewList, setReviewList] = useState([]);
+	const [interestList, setInterestList] = useState([]);
 
 	const toggleNavs = async index => {
 		setTabs(index);
 		if (index === 1) {
-			const list = await promiseFunc();
+			const list = await reviewPromiseFunc();
 			setReviewList(list);
 		}
 	};
 
 	useEffect(() => {
 		if (tabs === 1) {
-			promiseFunc().then(list => setReviewList(list));
+			reviewPromiseFunc().then(list => setReviewList(list));
+		} else {
+			myInterestPromiseFunc().then(list => setInterestList(list));
 		}
 	}, [tabs]);
 
@@ -79,7 +96,7 @@ const Profile = () => {
 		document.documentElement.scrollTop = 0;
 		document.scrollingElement.scrollTop = 0;
 		mainRef.current.scrollTop = 0;
-		promiseFunc().then(list => setReviewList([]));
+		reviewPromiseFunc().then(list => setReviewList(list));
 	}, []);
 
 	return (
@@ -186,54 +203,7 @@ const Profile = () => {
 												)}
 											</TabPane>
 											<TabPane tabId="tabs2">
-												<Row className="row-grid">
-													<Col lg="12">
-														<Card className="card-lift--hover shadow border-0">
-															<CardBody className="py-5">
-																<div className="icon icon-shape icon-shape-primary rounded-circle mb-4">
-																	<i className="ni ni-check-bold" />
-																</div>
-																<h6 className="text-primary text-uppercase">
-																	Download Argon
-																</h6>
-																<p className="description mt-3">
-																	Argon is a great free UI package based on Bootstrap 4
-																	that includes the most important components and
-																	features.
-																</p>
-																<div>
-																	<Badge color="primary" pill className="mr-1">
-																		design
-																	</Badge>
-																	<Badge color="primary" pill className="mr-1">
-																		system
-																	</Badge>
-																	<Badge color="primary" pill className="mr-1">
-																		creative
-																	</Badge>
-																</div>
-																<Button
-																	className="mt-4"
-																	color="primary"
-																	href="#pablo"
-																	onClick={e => e.preventDefault()}
-																>
-																	Learn more
-																</Button>
-															</CardBody>
-														</Card>
-													</Col>
-												</Row>
-												<p className="description">
-													Raw denim you probably haven't heard of them jean shorts Austin.
-													Nesciunt tofu stumptown aliqua, retro synth master cleanse.
-													Mustache cliche tempor, williamsburg carles vegan helvetica.
-													Reprehenderit butcher retro keffiyeh dreamcatcher synth.
-												</p>
-												<p className="description">
-													Raw denim you probably haven't heard of them jean shorts Austin.
-													Nesciunt tofu stumptown aliqua, retro synth master cleanse.
-												</p>
+												<BookInfoViewList bookList={interestList} rowPerCnt={4} />
 											</TabPane>
 										</TabContent>
 									</CardBody>
