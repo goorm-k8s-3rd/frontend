@@ -15,155 +15,237 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
 // reactstrap components
-import { Button, Card, Container, Row, Col } from "reactstrap";
+import {
+	Button,
+	Card,
+	Container,
+	Row,
+	Col,
+	Nav,
+	NavItem,
+	NavLink,
+	CardBody,
+	TabContent,
+	TabPane,
+	Badge,
+	CardImg,
+} from 'reactstrap';
 
 // core components
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
-import SimpleFooter from "components/Footers/SimpleFooter.js";
+import classNames from 'classnames';
+import DemoNavbar from 'components/Navbars/DemoNavbar';
 
-class Profile extends React.Component {
-  componentDidMount() {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    this.refs.main.scrollTop = 0;
-  }
-  render() {
-    return (
-      <>
-        <DemoNavbar />
-        <main className="profile-page" ref="main">
-          <section className="section-profile-cover section-shaped my-0">
-            {/* Circles background */}
-            <div className="shape shape-style-1 shape-default alpha-4">
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-            {/* SVG separator */}
-            <div className="separator separator-bottom separator-skew">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="none"
-                version="1.1"
-                viewBox="0 0 2560 100"
-                x="0"
-                y="0"
-              >
-                <polygon
-                  className="fill-white"
-                  points="2560 0 2560 100 0 100"
-                />
-              </svg>
-            </div>
-          </section>
-          <section className="section">
-            <Container>
-              <Card className="card-profile shadow mt--300">
-                <div className="px-4">
-                  <Row className="justify-content-center">
-                    <Col className="order-lg-2" lg="3">
-                      <div className="card-profile-image">
-                        <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                          <img
-                            alt="..."
-                            className="rounded-circle"
-                            src={require("assets/img/theme/team-4-800x800.jpg")}
-                          />
-                        </a>
-                      </div>
-                    </Col>
-                    <Col
-                      className="order-lg-3 text-lg-right align-self-lg-center"
-                      lg="4"
-                    >
-                      <div className="card-profile-actions py-4 mt-lg-0">
-                        <Button
-                          className="mr-4"
-                          color="info"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                          size="sm"
-                        >
-                          Connect
-                        </Button>
-                        <Button
-                          className="float-right"
-                          color="default"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                          size="sm"
-                        >
-                          Message
-                        </Button>
-                      </div>
-                    </Col>
-                    <Col className="order-lg-1" lg="4">
-                      <div className="card-profile-stats d-flex justify-content-center">
-                        <div>
-                          <span className="heading">22</span>
-                          <span className="description">Friends</span>
-                        </div>
-                        <div>
-                          <span className="heading">10</span>
-                          <span className="description">Photos</span>
-                        </div>
-                        <div>
-                          <span className="heading">89</span>
-                          <span className="description">Comments</span>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                  <div className="text-center mt-5">
-                    <h3>
-                      Jessica Jones{" "}
-                      <span className="font-weight-light">, 27</span>
-                    </h3>
-                    <div className="h6 font-weight-300">
-                      <i className="ni location_pin mr-2" />
-                      Bucharest, Romania
-                    </div>
-                    <div className="h6 mt-4">
-                      <i className="ni business_briefcase-24 mr-2" />
-                      Solution Manager - Creative Tim Officer
-                    </div>
-                    <div>
-                      <i className="ni education_hat mr-2" />
-                      University of Computer Science
-                    </div>
-                  </div>
-                  <div className="mt-5 py-5 border-top text-center">
-                    <Row className="justify-content-center">
-                      <Col lg="9">
-                        <p>
-                          An artist of considerable range, Ryan — the name taken
-                          by Melbourne-raised, Brooklyn-based Nick Murphy —
-                          writes, performs and records all of his own music,
-                          giving it a warm, intimate feel with a solid groove
-                          structure. An artist of considerable range.
-                        </p>
-                        <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                          Show more
-                        </a>
-                      </Col>
-                    </Row>
-                  </div>
-                </div>
-              </Card>
-            </Container>
-          </section>
-        </main>
-        <SimpleFooter />
-      </>
-    );
-  }
-}
+const promiseFunc = () => {
+	return new Promise(res => {
+		setTimeout(() => {
+			res(
+				Array.from({ length: 13 }, (_, i) => ({
+					title: `이름${i}`,
+					thumbnail: 'https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg',
+					rating: ((i + 1) / 3).toFixed(2),
+					like: i * 3,
+					dislike: i,
+					comment:
+						'리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰',
+				})),
+			);
+		}, 1000);
+	});
+};
+
+const Profile = () => {
+	const mainRef = useRef(null);
+	const [tabs, setTabs] = useState(1);
+	const [reviewList, setReviewList] = useState([]);
+
+	const toggleNavs = async index => {
+		setTabs(index);
+		if (index === 1) {
+			const list = await promiseFunc();
+			setReviewList(list);
+		}
+	};
+
+	useEffect(() => {
+		if (tabs === 1) {
+			promiseFunc().then(list => setReviewList(list));
+		}
+	}, [tabs]);
+
+	useEffect(() => {
+		document.documentElement.scrollTop = 0;
+		document.scrollingElement.scrollTop = 0;
+		mainRef.current.scrollTop = 0;
+		promiseFunc().then(list => setReviewList([]));
+	}, []);
+
+	return (
+		<>
+			<DemoNavbar />
+			<main className="profile-page" ref={mainRef}>
+				<section className="section section-lg section-shaped pb-300">
+					<div className="shape shape-style-1 shape-default">
+						<img
+							src={require('assets/img/theme/book1.jpg')}
+							style={{ width: '100%', height: '100%' }}
+						/>
+					</div>
+				</section>
+				<section>
+					<Container>
+						<div className="px-4">
+							<div className="text-center mt-5">
+								<Nav
+									className="nav-fill flex-column flex-md-row"
+									id="tabs-icons-text"
+									pills
+									role="tablist"
+								>
+									<NavItem>
+										<NavLink
+											aria-selected={tabs === 1}
+											className={classNames('mb-sm-3 mb-md-0', {
+												active: tabs === 1,
+											})}
+											onClick={e => {
+												e.preventDefault();
+												toggleNavs(1);
+											}}
+											href="#pablo"
+											role="tab"
+										>
+											<i className="ni ni-cloud-upload-96 mr-2" />내 리뷰
+										</NavLink>
+									</NavItem>
+									<NavItem>
+										<NavLink
+											aria-selected={tabs === 2}
+											className={classNames('mb-sm-3 mb-md-0', {
+												active: tabs === 2,
+											})}
+											onClick={e => {
+												e.preventDefault();
+												toggleNavs(2);
+											}}
+											href="#pablo"
+											role="tab"
+										>
+											<i className="ni ni-bell-55 mr-2" />
+											관심 작품
+										</NavLink>
+									</NavItem>
+								</Nav>
+								<Card className="shadow">
+									<CardBody>
+										<TabContent activeTab={'tabs' + tabs}>
+											<TabPane tabId="tabs1">
+												{reviewList.length ? (
+													reviewList.map((review, i) => (
+														<Card key={i} className="shadow shadow-lg--hover mt-5">
+															<CardBody>
+																<div className="d-flex px-3">
+																	<div className="d-flex flex-column">
+																		<CardImg
+																			alt="..."
+																			src="https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg"
+																			style={{ height: '200px', width: '130px' }}
+																		/>
+																		{review.title}
+																	</div>
+																	<div className="pl-4 md text-left">
+																		<Badge color="primary" pill className="mr-1">
+																			My Rating: {review.rating}
+																		</Badge>
+																		<Badge color="danger" pill className="mr-1">
+																			<i className="ni ni-bold-up" /> {review.like}
+																		</Badge>
+																		<Badge color="info" pill className="mr-1">
+																			<i className="ni ni-bold-down" /> {review.dislike}
+																		</Badge>
+																		<hr
+																			style={{
+																				marginTop: '10px',
+																				marginBottom: '10px',
+																			}}
+																		/>
+																		<p>{review.comment}</p>
+																	</div>
+																</div>
+															</CardBody>
+														</Card>
+													))
+												) : (
+													<Card className="bg-secondary shadow border-0">
+														<CardBody className="px-lg-5 py-lg-5">
+															작성된 리뷰가 없습니다
+														</CardBody>
+													</Card>
+												)}
+											</TabPane>
+											<TabPane tabId="tabs2">
+												<Row className="row-grid">
+													<Col lg="12">
+														<Card className="card-lift--hover shadow border-0">
+															<CardBody className="py-5">
+																<div className="icon icon-shape icon-shape-primary rounded-circle mb-4">
+																	<i className="ni ni-check-bold" />
+																</div>
+																<h6 className="text-primary text-uppercase">
+																	Download Argon
+																</h6>
+																<p className="description mt-3">
+																	Argon is a great free UI package based on Bootstrap 4
+																	that includes the most important components and
+																	features.
+																</p>
+																<div>
+																	<Badge color="primary" pill className="mr-1">
+																		design
+																	</Badge>
+																	<Badge color="primary" pill className="mr-1">
+																		system
+																	</Badge>
+																	<Badge color="primary" pill className="mr-1">
+																		creative
+																	</Badge>
+																</div>
+																<Button
+																	className="mt-4"
+																	color="primary"
+																	href="#pablo"
+																	onClick={e => e.preventDefault()}
+																>
+																	Learn more
+																</Button>
+															</CardBody>
+														</Card>
+													</Col>
+												</Row>
+												<p className="description">
+													Raw denim you probably haven't heard of them jean shorts Austin.
+													Nesciunt tofu stumptown aliqua, retro synth master cleanse.
+													Mustache cliche tempor, williamsburg carles vegan helvetica.
+													Reprehenderit butcher retro keffiyeh dreamcatcher synth.
+												</p>
+												<p className="description">
+													Raw denim you probably haven't heard of them jean shorts Austin.
+													Nesciunt tofu stumptown aliqua, retro synth master cleanse.
+												</p>
+											</TabPane>
+										</TabContent>
+									</CardBody>
+								</Card>
+							</div>
+						</div>
+					</Container>
+				</section>
+				<br />
+			</main>
+		</>
+	);
+};
 
 export default Profile;
