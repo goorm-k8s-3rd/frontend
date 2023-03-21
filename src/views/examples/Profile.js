@@ -70,6 +70,53 @@ const myInterestPromiseFunc = () => {
 	});
 };
 
+const MyReview = ({ reviewList }) => {
+	return (
+		<>
+			{reviewList.length ? (
+				reviewList.map((review, i) => (
+					<Card key={i} className="shadow shadow-lg--hover mt-5">
+						<CardBody>
+							<div className="d-flex px-3">
+								<div className="d-flex flex-column">
+									<CardImg
+										alt="..."
+										src="https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg"
+										style={{ height: '200px', width: '130px' }}
+									/>
+									{review.title}
+								</div>
+								<div className="pl-4 md text-left">
+									<Badge color="primary" pill className="mr-1">
+										My Rating: {review.rating}
+									</Badge>
+									<Badge color="danger" pill className="mr-1">
+										<i className="ni ni-bold-up" /> {review.like}
+									</Badge>
+									<Badge color="info" pill className="mr-1">
+										<i className="ni ni-bold-down" /> {review.dislike}
+									</Badge>
+									<hr
+										style={{
+											marginTop: '10px',
+											marginBottom: '10px',
+										}}
+									/>
+									<p>{review.comment}</p>
+								</div>
+							</div>
+						</CardBody>
+					</Card>
+				))
+			) : (
+				<Card className="bg-secondary shadow border-0">
+					<CardBody className="px-lg-5 py-lg-5">작성된 리뷰가 없습니다</CardBody>
+				</Card>
+			)}
+		</>
+	);
+};
+
 const Profile = () => {
 	const mainRef = useRef(null);
 	const [tabs, setTabs] = useState(1);
@@ -159,48 +206,7 @@ const Profile = () => {
 									<CardBody>
 										<TabContent activeTab={'tabs' + tabs}>
 											<TabPane tabId="tabs1">
-												{reviewList.length ? (
-													reviewList.map((review, i) => (
-														<Card key={i} className="shadow shadow-lg--hover mt-5">
-															<CardBody>
-																<div className="d-flex px-3">
-																	<div className="d-flex flex-column">
-																		<CardImg
-																			alt="..."
-																			src="https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg"
-																			style={{ height: '200px', width: '130px' }}
-																		/>
-																		{review.title}
-																	</div>
-																	<div className="pl-4 md text-left">
-																		<Badge color="primary" pill className="mr-1">
-																			My Rating: {review.rating}
-																		</Badge>
-																		<Badge color="danger" pill className="mr-1">
-																			<i className="ni ni-bold-up" /> {review.like}
-																		</Badge>
-																		<Badge color="info" pill className="mr-1">
-																			<i className="ni ni-bold-down" /> {review.dislike}
-																		</Badge>
-																		<hr
-																			style={{
-																				marginTop: '10px',
-																				marginBottom: '10px',
-																			}}
-																		/>
-																		<p>{review.comment}</p>
-																	</div>
-																</div>
-															</CardBody>
-														</Card>
-													))
-												) : (
-													<Card className="bg-secondary shadow border-0">
-														<CardBody className="px-lg-5 py-lg-5">
-															작성된 리뷰가 없습니다
-														</CardBody>
-													</Card>
-												)}
+												<MyReview reviewList={reviewList} />
 											</TabPane>
 											<TabPane tabId="tabs2">
 												<BookInfoViewList bookList={interestList} rowPerCnt={4} />
