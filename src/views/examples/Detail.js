@@ -5,7 +5,6 @@ import {
 	Button,
 	Card,
 	CardBody,
-	CardImg,
 	Col,
 	Container,
 	Form,
@@ -13,6 +12,8 @@ import {
 	Row,
 } from 'reactstrap';
 import { Rating } from 'react-simple-star-rating';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoils/user';
 
 const bookInfoPromiseFunc = id => {
 	return new Promise(res => {
@@ -25,11 +26,24 @@ const bookInfoPromiseFunc = id => {
 				total_ratin: 3.33,
 				content:
 					'내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내',
+				myReview: { rating: 0.5, comment: '댓글댓글댓글댓글댓글댓글댓글댓글' },
+				commentList: Array.from({ length: 10 }, (_, i) => ({
+					id: `id${i}`,
+					comment: `댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글${i}`,
+					rating: 3.5,
+					like: i * 2,
+					dislike: i,
+					/** 눌렀다면 어디에 눌렀는지 1이면 like 2이면 dislike 이 값 0이라면 아직 안누름*/
+					userCheck: i % 3,
+				})),
 			});
 		}, 1000);
 	});
 };
 
+/**
+ * @param {string} contents 유저가 쓴 리뷰 내용
+ */
 const commentPromiseFunc = contents => {
 	return new Promise(res => {
 		setTimeout(() => {
@@ -38,36 +52,85 @@ const commentPromiseFunc = contents => {
 	});
 };
 
-const OtherReview = ({ reviewList }) => {
+const deletePromiseFunc = () => {
+	return new Promise(res => {
+		setTimeout(() => {
+			res({ isSucceed: true });
+		}, 1000);
+	});
+};
+
+/**
+ * @param {string} id 상대방 리뷰의 아이디
+ * @param {boolean} isLike 공감인지 비공감인지
+ */
+const likePromiseFunc = (id, isLike) => {
+	return new Promise(res => {
+		setTimeout(() => {
+			res({ isSucceed: true });
+		}, 500);
+	});
+};
+
+const OtherReview = ({ reviewList, onClickLike }) => {
+	const { userId } = useRecoilValue(userState);
+
 	return (
 		<>
 			{reviewList.length ? (
-				reviewList.map((review, i) => (
-					<Card key={i} className="shadow shadow-lg--hover mt-5">
-						<CardBody>
-							<div className="d-flex px-3">
-								<div className="pl-4 md text-left">
-									<Badge color="primary" pill className="mr-1">
-										My Rating: {review.rating}
-									</Badge>
-									<Badge color="danger" pill className="mr-1">
-										<i className="ni ni-bold-up" /> {review.like}
-									</Badge>
-									<Badge color="info" pill className="mr-1">
-										<i className="ni ni-bold-down" /> {review.dislike}
-									</Badge>
-									<hr
-										style={{
-											marginTop: '10px',
-											marginBottom: '10px',
-										}}
-									/>
-									<p>{review.comment}</p>
+				reviewList
+					.filter(review => review.id !== userId)
+					.map((review, i) => (
+						<Card key={i} className="shadow shadow-lg--hover mt-5">
+							<CardBody>
+								<div className="d-flex">
+									<div className="pl-4 md text-left">
+										{review.id}{' '}
+										<Badge color="primary" pill className="mr-1">
+											Rating: {review.rating}
+										</Badge>
+										<Badge
+											color="danger"
+											pill
+											className="mr-1"
+											onClick={() => {
+												onClickLike(true, i);
+											}}
+											style={{ cursor: 'pointer' }}
+										>
+											<i
+												style={{ color: review.userCheck === 1 ? 'black' : '' }}
+												className="ni ni-bold-up"
+											/>{' '}
+											{review.like}
+										</Badge>
+										<Badge
+											color="info"
+											pill
+											className="mr-1"
+											onClick={() => {
+												onClickLike(false, i);
+											}}
+											style={{ cursor: 'pointer' }}
+										>
+											<i
+												style={{ color: review.userCheck === 2 ? 'black' : '' }}
+												className="ni ni-bold-down"
+											/>{' '}
+											{review.dislike}
+										</Badge>
+										<hr
+											style={{
+												marginTop: '10px',
+												marginBottom: '10px',
+											}}
+										/>
+										<p>{review.comment}</p>
+									</div>
 								</div>
-							</div>
-						</CardBody>
-					</Card>
-				))
+							</CardBody>
+						</Card>
+					))
 			) : (
 				<Card className="bg-secondary shadow border-0">
 					<CardBody className="px-lg-5 py-lg-5">작성된 리뷰가 없습니다</CardBody>
@@ -80,23 +143,63 @@ const OtherReview = ({ reviewList }) => {
 const Detail = ({ match }) => {
 	const [bookInfo, setBookInfo] = useState({});
 	const [rating, setRating] = useState(0);
-	const [reviewList, setReviewList] = useState([]);
 	const commentRef = useRef(null);
 
-	const onSubmitTitle = async name => {
+	const onSubmitTitle = async comment => {
 		try {
-			console.log(name);
-			// setBookName(name);
-			// const result = await promiseFunc(name, curPage);
-			// setBookList(result);
+			await commentPromiseFunc(comment);
+			setBookInfo({ ...bookInfo, myReview: { rating, comment } });
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const onClickDelete = async () => {
+		try {
+			await deletePromiseFunc();
+			setRating(0);
+			setBookInfo({ ...bookInfo, myReview: {} });
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const onClickLike = async (isUp, idx) => {
+		try {
+			const commentList = [...bookInfo?.commentList];
+			if (!commentList[idx]) {
+				throw Error('해당 인덱스가 없습니다');
+			}
+			await likePromiseFunc(commentList[idx].id, isUp);
+
+			const beforeLike = commentList[idx].userCheck;
+			if (beforeLike === 0) {
+				commentList[idx][isUp ? 'like' : 'dislike'] += 1;
+			} else {
+				commentList[idx][beforeLike === 1 ? 'like' : 'dislike'] -= 1;
+			}
+			commentList[idx].userCheck = isUp ? 1 : 2;
+
+			if (beforeLike === 1 && !isUp) {
+				commentList[idx].dislike += 1;
+			} else if (beforeLike === 2 && isUp) {
+				commentList[idx].like += 1;
+			} else if (beforeLike !== 0) {
+				commentList[idx].userCheck = 0;
+			}
+			setBookInfo({ ...bookInfo, commentList });
 		} catch (e) {
 			console.log(e);
 		}
 	};
 
 	useEffect(() => {
-		bookInfoPromiseFunc(match.params.id).then(result => setBookInfo(result));
-	}, []);
+		bookInfoPromiseFunc(match.params.id).then(result => {
+			setBookInfo(result);
+			commentRef.current.value = '123';
+			setRating(result?.myReview?.rating ?? 0);
+		});
+	}, [match.params.id]);
 
 	return (
 		<>
@@ -134,8 +237,13 @@ const Detail = ({ match }) => {
 			</section>
 			<section className="section bg-secondary">
 				<Container>
-					<h2>내 리뷰</h2>
-					<Rating allowFraction transition onClick={setRating} />
+					<h2>내 리뷰 ({rating.toFixed(1)})</h2>
+					<Rating
+						initialValue={bookInfo?.myReview?.rating ?? 0}
+						allowFraction
+						transition
+						onClick={setRating}
+					/>
 					<Form
 						onSubmit={e => {
 							e.preventDefault();
@@ -143,7 +251,8 @@ const Detail = ({ match }) => {
 						}}
 					>
 						<Input
-							id="exampleFormControlTextarea1"
+							innerRef={commentRef}
+							id="myReview"
 							placeholder="리뷰를 적으세요!"
 							rows="3"
 							type="textarea"
@@ -151,13 +260,19 @@ const Detail = ({ match }) => {
 						<Button color="success" type="submit">
 							등록하기
 						</Button>
+						<Button color="danger" onClick={onClickDelete}>
+							삭제
+						</Button>
 					</Form>
 				</Container>
 			</section>
 			<section className="section bg-secondary">
 				<Container>
-					<h2>리뷰</h2>
-					<OtherReview reviewList={reviewList} />
+					<h2>리뷰 ({bookInfo.commentList?.length ?? 0})</h2>
+					<OtherReview
+						reviewList={bookInfo.commentList ?? []}
+						onClickLike={onClickLike}
+					/>
 				</Container>
 			</section>
 		</>
