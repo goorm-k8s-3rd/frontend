@@ -143,7 +143,6 @@ const Profile = () => {
 		document.documentElement.scrollTop = 0;
 		document.scrollingElement.scrollTop = 0;
 		mainRef.current.scrollTop = 0;
-		reviewPromiseFunc().then(list => setReviewList(list));
 	}, []);
 
 	return (

@@ -57,6 +57,7 @@
     "react-dom": "18.2.0",
     "react-router-dom": "5.1.2",
     "react-scripts": "5.0.1",
+    "react-simple-star-rating": "^5.1.7",
     "reactstrap": "8.4.1",
     "recoil": "^0.7.7",
     "sass": "1.53.0"
