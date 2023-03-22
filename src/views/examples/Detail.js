@@ -13,7 +13,9 @@ import {
 } from 'reactstrap';
 import { Rating } from 'react-simple-star-rating';
 import { useRecoilValue } from 'recoil';
+import NotificationAlert from 'react-notification-alert';
 import { userState } from 'recoils/user';
+import { notify } from 'util';
 
 const bookInfoPromiseFunc = id => {
 	return new Promise(res => {
@@ -45,9 +47,10 @@ const bookInfoPromiseFunc = id => {
  * @param {string} contents 유저가 쓴 리뷰 내용
  */
 const commentPromiseFunc = contents => {
-	return new Promise(res => {
+	return new Promise((res, rej) => {
 		setTimeout(() => {
-			res({ isSucceed: true });
+			// res({ isSucceed: true });
+			rej('asdf');
 		}, 1000);
 	});
 };
@@ -144,13 +147,16 @@ const Detail = ({ match }) => {
 	const [bookInfo, setBookInfo] = useState({});
 	const [rating, setRating] = useState(0);
 	const commentRef = useRef(null);
+	const notificationAlertRef = useRef(null);
 
-	const onSubmitTitle = async comment => {
+	const onSubmitContent = async comment => {
 		try {
 			await commentPromiseFunc(comment);
 			setBookInfo({ ...bookInfo, myReview: { rating, comment } });
+			notify(notificationAlertRef, 2, '등록완료!');
 		} catch (e) {
 			console.log(e);
+			notify(notificationAlertRef, 3, e);
 		}
 	};
 
@@ -204,6 +210,7 @@ const Detail = ({ match }) => {
 	return (
 		<>
 			<DemoNavbar />
+			<NotificationAlert ref={notificationAlertRef} />
 			<section className="section section-lg section-shaped pb-300">
 				<div className="shape shape-style-1 shape-default">
 					<img
@@ -247,7 +254,7 @@ const Detail = ({ match }) => {
 					<Form
 						onSubmit={e => {
 							e.preventDefault();
-							onSubmitTitle(e.target[0].value);
+							onSubmitContent(e.target[0].value);
 						}}
 					>
 						<Input
