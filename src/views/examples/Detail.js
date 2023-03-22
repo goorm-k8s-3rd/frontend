@@ -216,6 +216,7 @@ const Detail = ({ match }) => {
 					<img
 						src={require('assets/img/theme/book1.jpg')}
 						style={{ width: '100%', height: '100%' }}
+						alt="..."
 					/>
 				</div>
 			</section>

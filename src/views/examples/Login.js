@@ -159,6 +159,7 @@ const Login = memo(() => {
 					<div className="shape shape-style-1 bg-gradient-default">
 						<img
 							src={require('assets/img/theme/book1.jpg')}
+							alt="..."
 							style={{ width: '100%', height: '100%' }}
 						/>
 					</div>
