@@ -23,7 +23,7 @@ const BookInfoViewList = ({ bookList, rowPerCnt }) => {
 										<CardImg
 											alt="..."
 											src={bookInfo.thumbnail}
-											style={{ height: '300px' }}
+											style={{ height: `${Math.floor(1200 / rowPerCnt)}px` }}
 											top
 										/>
 										<CardBody className="py-3">
