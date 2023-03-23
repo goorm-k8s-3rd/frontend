@@ -1,4 +1,4 @@
-import Index from 'views/Index.js';
+import Home from 'views/examples/Home.js';
 import Search from 'views/examples/Search.js';
 import Login from 'views/examples/Login.js';
 import Profile from 'views/examples/Profile.js';
@@ -9,8 +9,8 @@ import Detail from 'views/examples/Detail';
 const dashboardRouteInfo = {
 	index: {
 		path: '/',
-		name: 'Index',
-		component: Index,
+		name: 'Home',
+		component: Home,
 		isLoginRequired: false,
 		isLogoutRequired: false,
 	},
