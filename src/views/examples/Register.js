@@ -15,189 +15,178 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
-  Container,
-  Row,
-  Col
-} from "reactstrap";
+	Button,
+	Card,
+	CardHeader,
+	CardBody,
+	FormGroup,
+	Form,
+	Input,
+	InputGroupAddon,
+	InputGroupText,
+	InputGroup,
+	Container,
+	Row,
+	Col,
+} from 'reactstrap';
 
 // core components
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
-import SimpleFooter from "components/Footers/SimpleFooter.js";
+import DemoNavbar from 'components/Navbars/DemoNavbar.js';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoils/user';
 
-class Register extends React.Component {
-  componentDidMount() {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    this.refs.main.scrollTop = 0;
-  }
-  render() {
-    return (
-      <>
-        <DemoNavbar />
-        <main ref="main">
-          <section className="section section-shaped section-lg">
-            <div className="shape shape-style-1 bg-gradient-default">
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-            <Container className="pt-lg-7">
-              <Row className="justify-content-center">
-                <Col lg="5">
-                  <Card className="bg-secondary shadow border-0">
-                    <CardHeader className="bg-white pb-5">
-                      <div className="text-muted text-center mb-3">
-                        <small>Sign up with</small>
-                      </div>
-                      <div className="text-center">
-                        <Button
-                          className="btn-neutral btn-icon mr-4"
-                          color="default"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <span className="btn-inner--icon mr-1">
-                            <img
-                              alt="..."
-                              src={
-                                require("assets/img/icons/common/github.svg")
-                                  .default
-                              }
-                            />
-                          </span>
-                          <span className="btn-inner--text">Github</span>
-                        </Button>
-                        <Button
-                          className="btn-neutral btn-icon ml-1"
-                          color="default"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <span className="btn-inner--icon mr-1">
-                            <img
-                              alt="..."
-                              src={
-                                require("assets/img/icons/common/google.svg")
-                                  .default
-                              }
-                            />
-                          </span>
-                          <span className="btn-inner--text">Google</span>
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardBody className="px-lg-5 py-lg-5">
-                      <div className="text-center text-muted mb-4">
-                        <small>Or sign up with credentials</small>
-                      </div>
-                      <Form role="form">
-                        <FormGroup>
-                          <InputGroup className="input-group-alternative mb-3">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="ni ni-hat-3" />
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input placeholder="Name" type="text" />
-                          </InputGroup>
-                        </FormGroup>
-                        <FormGroup>
-                          <InputGroup className="input-group-alternative mb-3">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="ni ni-email-83" />
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input placeholder="Email" type="email" />
-                          </InputGroup>
-                        </FormGroup>
-                        <FormGroup>
-                          <InputGroup className="input-group-alternative">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="ni ni-lock-circle-open" />
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input
-                              placeholder="Password"
-                              type="password"
-                              autoComplete="off"
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <div className="text-muted font-italic">
-                          <small>
-                            password strength:{" "}
-                            <span className="text-success font-weight-700">
-                              strong
-                            </span>
-                          </small>
-                        </div>
-                        <Row className="my-4">
-                          <Col xs="12">
-                            <div className="custom-control custom-control-alternative custom-checkbox">
-                              <input
-                                className="custom-control-input"
-                                id="customCheckRegister"
-                                type="checkbox"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="customCheckRegister"
-                              >
-                                <span>
-                                  I agree with the{" "}
-                                  <a
-                                    href="#pablo"
-                                    onClick={(e) => e.preventDefault()}
-                                  >
-                                    Privacy Policy
-                                  </a>
-                                </span>
-                              </label>
-                            </div>
-                          </Col>
-                        </Row>
-                        <div className="text-center">
-                          <Button
-                            className="mt-4"
-                            color="primary"
-                            type="button"
-                          >
-                            Create account
-                          </Button>
-                        </div>
-                      </Form>
-                    </CardBody>
-                  </Card>
-                </Col>
-              </Row>
-            </Container>
-          </section>
-        </main>
-        <SimpleFooter />
-      </>
-    );
-  }
-}
+const ErrorMessageView = ({ errorMessage }) => {
+	if (!errorMessage) return null;
+	return (
+		<div className="text-muted font-italic">
+			<small>
+				에러:
+				<span className="text-danger font-weight-700">{errorMessage}</span>
+			</small>
+		</div>
+	);
+};
+
+const FormDataView = ({ onChange }) => {
+	return (
+		<>
+			<FormGroup className="mb-3">
+				<InputGroup className="input-group-alternative">
+					<InputGroupAddon addonType="prepend">
+						<InputGroupText>
+							<i className="ni ni-circle-08" />
+						</InputGroupText>
+					</InputGroupAddon>
+					<Input placeholder="id" name="id" onChange={onChange} required />
+				</InputGroup>
+			</FormGroup>
+			<FormGroup className="mb-3">
+				<InputGroup className="input-group-alternative">
+					<InputGroupAddon addonType="prepend">
+						<InputGroupText>
+							<i className="ni ni-email-83" />
+						</InputGroupText>
+					</InputGroupAddon>
+					<Input
+						placeholder="Email"
+						type="email"
+						name="email"
+						onChange={onChange}
+						required
+					/>
+				</InputGroup>
+			</FormGroup>
+			<FormGroup>
+				<InputGroup className="input-group-alternative">
+					<InputGroupAddon addonType="prepend">
+						<InputGroupText>
+							<i className="ni ni-lock-circle-open" />
+						</InputGroupText>
+					</InputGroupAddon>
+					<Input
+						placeholder="Password"
+						type="password"
+						name="password"
+						autoComplete="off"
+						onChange={onChange}
+						required
+					/>
+				</InputGroup>
+			</FormGroup>
+		</>
+	);
+};
+
+const Register = () => {
+	const mainRef = useRef(null);
+	const currentUserState = useRecoilValue(userState);
+
+	if (currentUserState.isLogin) {
+		window.location.href = '/';
+	}
+
+	const [userInfo, setUserInfo] = useState({
+		id: '',
+		email: '',
+		password: '',
+	});
+	const [errorMessage, setErrorMessage] = useState('');
+
+	const onChange = e => {
+		const { name, value } = e.target;
+		setUserInfo({ ...userInfo, [name]: value });
+	};
+
+	const useUserLogin = async e => {
+		e.preventDefault();
+		try {
+			const promiseFunc = userInfo => {
+				console.log(userInfo);
+				return new Promise((resolve, reject) => {
+					setTimeout(() => {
+						// resolve({ code: 200, nickname: '하이' });
+						reject({ code: 400, errorMessage: '에러내용' });
+					}, 2000);
+				});
+			};
+			await promiseFunc(userInfo);
+
+			window.location.href = '/login';
+		} catch (err) {
+			setErrorMessage(err.errorMessage);
+		}
+	};
+
+	useEffect(() => {
+		document.documentElement.scrollTop = 0;
+		document.scrollingElement.scrollTop = 0;
+		mainRef.current.scrollTop = 0;
+	}, []);
+
+	return (
+		<>
+			<DemoNavbar />
+			<main ref={mainRef}>
+				<section className="section section-shaped section-lg" style={{ height: '100%' }}>
+					<div className="shape shape-style-1 bg-gradient-default">
+						<img
+							src={require('assets/img/theme/book1.jpg')}
+							alt="..."
+							style={{ width: '100%', height: '100%' }}
+						/>
+					</div>
+					<Container className="pt-lg-7">
+						<Row className="justify-content-center">
+							<Col lg="5">
+								<Card className="bg-secondary shadow border-0">
+									<CardHeader>
+										<span>
+											<b>로그인</b>
+										</span>
+									</CardHeader>
+									<CardBody className="px-lg-5 py-lg-5">
+										<Form onSubmit={useUserLogin}>
+											<FormDataView onChange={onChange}></FormDataView>
+											<ErrorMessageView errorMessage={errorMessage}></ErrorMessageView>
+											<div className="text-center">
+												<Button className="my-4" color="primary" type="submit">
+													로그인
+												</Button>
+											</div>
+										</Form>
+									</CardBody>
+								</Card>
+							</Col>
+						</Row>
+					</Container>
+				</section>
+			</main>
+		</>
+	);
+};
 
 export default Register;
