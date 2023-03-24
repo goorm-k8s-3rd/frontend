@@ -1,10 +1,10 @@
-import Home from 'views/examples/Home.js';
-import Search from 'views/examples/Search.js';
-import Login from 'views/examples/Login.js';
-import Profile from 'views/examples/Profile.js';
-import Register from 'views/examples/Register.js';
-import ErrorPage from 'views/examples/404';
-import Detail from 'views/examples/Detail';
+import Home from 'views/Home.js';
+import Search from 'views/Search.js';
+import Login from 'views/Login.js';
+import Profile from 'views/Profile.js';
+import Register from 'views/Register.js';
+import ErrorPage from 'views/404';
+import Detail from 'views/Detail';
 
 const dashboardRouteInfo = {
 	index: {
