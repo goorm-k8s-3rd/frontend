@@ -15,11 +15,9 @@
 
 ## Quick start
 
-- `npm i argon-design-system-react`
-- [Download from Github](https://github.com/creativetimofficial/argon-design-system-react/archive/master.zip).
-- [Download from Creative Tim](https://www.creative-tim.com/product/argon-design-system-react?ref=adsr-github-readme).
-- Install with [Bower](https://bower.io/?ref=creativetim): `bower install argon-design-system-react`.
-- Clone the repo: `git clone https://github.com/creativetimofficial/argon-design-system-react.git`.
+- Clone the repo: `git clone https://github.com/goorm-k8s-3rd/frontend.git`.
+- `yarn`
+- `yarn run start`
 
 
 ## File Structure
@@ -36,6 +34,7 @@ Argon Design System React
 ├── Documentation
 │   └── documentation.html
 ├── public
+│   ├── book-icon.png
 │   ├── favicon.ico
 │   ├── index.html
 │   └── manifest.json
@@ -73,39 +72,18 @@ Argon Design System React
     │           └── fonts
     ├── components
     │   ├── Footers
-    │   │   ├── CardsFooter.js
     │   │   └── SimpleFooter.js
     │   └── Navbars
     │       └── DemoNavbar.js
     ├── index.js
     └── views
-        ├── Index.js
-        ├── IndexSections
-        │   ├── Alerts.js
-        │   ├── Buttons.js
-        │   ├── Carousel.js
-        │   ├── CustomControls.js
-        │   ├── Datepicker.js
-        │   ├── Download.js
-        │   ├── Hero.js
-        │   ├── Icons.js
-        │   ├── Inputs.js
-        │   ├── Labels.js
-        │   ├── Login.js
-        │   ├── Menus.js
-        │   ├── Modals.js
-        │   ├── Navbars.js
-        │   ├── Pagination.js
-        │   ├── Pills.js
-        │   ├── Progress.js
-        │   ├── Tabs.js
-        │   ├── TooltipPopover.js
-        │   └── Typography.js
-        └── examples
-            ├── Landing.js
-            ├── Login.js
-            ├── Profile.js
-            └── Register.js
+        ├── 404.js
+        ├── Detail.js
+        ├── Home.js
+        ├── Login.js
+        ├── Profile.js
+        ├── Register.js
+        └── Search.js
 ```
 
 ## Browser Support
