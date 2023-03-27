@@ -30,7 +30,7 @@ const BookInfoViewList = ({ bookList, rowPerCnt }) => {
 											<h6 className="text-primary text-uppercase">{bookInfo.title}</h6>
 											<div>
 												<Badge color="primary" pill className="mr-1">
-													Rating: {bookInfo.total_ratin}
+													Rating: {bookInfo.rate}
 												</Badge>
 											</div>
 										</CardBody>
