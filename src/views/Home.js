@@ -77,10 +77,11 @@ const Hero = () => {
 										bookList={Array.from({ length: 6 }, (_, i) => ({
 											title: `제목${i}`,
 											authors: `저자${i}`,
-											isbn: i,
 											thumbnail:
-												'https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg',
-											total_ratin: ((i + 1) / 3).toFixed(2),
+												'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6080832%3Ftimestamp%3D20230322161657',
+											url: 'https://search.daum.net/search?w=bookpage&bookId=6080832&q=%ED%98%BC%EC%9E%90+%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%ED%8C%8C%EC%9D%B4%EC%8D%AC',
+											isbn: i,
+											rate: ((i + 1) / 3).toFixed(2),
 										}))}
 										rowPerCnt={6}
 									/>

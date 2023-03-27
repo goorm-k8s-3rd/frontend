@@ -20,7 +20,6 @@ export const userState = atom({
 	default: {
 		userId: '',
 		isLogin: false,
-		token: '',
 	},
 	effects: [localStorageEffect('userState')],
 });

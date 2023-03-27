@@ -46,8 +46,10 @@ const reviewPromiseFunc = () => {
 				Array.from({ length: 13 }, (_, i) => ({
 					isbn: i,
 					title: `이름${i}`,
-					thumbnail: 'https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg',
-					rating: ((i + 1) / 3).toFixed(2),
+					thumbnail:
+						'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6080832%3Ftimestamp%3D20230322161657',
+					url: 'https://search.daum.net/search?w=bookpage&bookId=6080832&q=%ED%98%BC%EC%9E%90+%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%ED%8C%8C%EC%9D%B4%EC%8D%AC',
+					rate: ((i + 1) / 3).toFixed(2),
 					like: i * 3,
 					dislike: i,
 					comment:
@@ -65,9 +67,11 @@ const myInterestPromiseFunc = () => {
 				Array.from({ length: 13 }, (_, i) => ({
 					title: `책이름1${i}`,
 					authors: `저자${i}`,
+					thumbnail:
+						'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6080832%3Ftimestamp%3D20230322161657',
+					url: 'https://search.daum.net/search?w=bookpage&bookId=6080832&q=%ED%98%BC%EC%9E%90+%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%ED%8C%8C%EC%9D%B4%EC%8D%AC',
 					isbn: i,
-					thumbnail: 'https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg',
-					total_ratin: ((i + 1) / 3).toFixed(2),
+					rate: ((i + 1) / 3).toFixed(2),
 				})),
 			);
 		}, 1000);
@@ -101,7 +105,7 @@ const MyReview = ({ reviewList }) => {
 								</div>
 								<div className="pl-4 md text-left">
 									<Badge color="primary" pill className="mr-1">
-										My Rating: {review.rating}
+										My Rating: {review.rate}
 									</Badge>
 									<Badge color="danger" pill className="mr-1">
 										<i className="ni ni-bold-up" /> {review.like}

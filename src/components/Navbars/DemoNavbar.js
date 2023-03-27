@@ -58,14 +58,12 @@ const UserButtonView = () => {
 				...oldState,
 				userId: '',
 				isLogin: false,
-				token: '',
 			}));
 		} catch (err) {
 			setUserState(oldState => ({
 				...oldState,
 				userId: '',
 				isLogin: false,
-				token: '',
 			}));
 		}
 	};
