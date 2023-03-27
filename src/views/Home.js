@@ -31,8 +31,11 @@ const Hero = () => {
 						<Container className="shape-container d-flex align-items-center py-lg">
 							<div className="col px-0">
 								<Row className="align-items-center justify-content-center">
-									<Col className="text-center" lg="6">
-										<div style={{ paddingBottom: '60px' }}></div>
+									<Col
+										style={{ marginTop: '60px', marginBottom: '60px' }}
+										className="text-center"
+										lg="6"
+									>
 										<h1 style={{ color: 'white' }}>Book Network</h1>
 										<p
 											style={{

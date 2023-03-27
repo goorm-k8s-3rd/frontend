@@ -40,6 +40,7 @@ const Search = () => {
 	const mainRef = useRef(null);
 	const [bookList, setBookList] = useState([]);
 	const [curPage, setCurPage] = useState(1);
+	const [maxPage, setMaxPage] = useState(1);
 	const [bookName, setBookName] = useState('');
 
 	const onSubmitTitle = async name => {
@@ -47,6 +48,7 @@ const Search = () => {
 			setBookName(name);
 			const result = await promiseFunc(name, curPage);
 			setBookList(result);
+			setMaxPage(11);
 		} catch (e) {
 			console.log(e);
 		}
@@ -128,7 +130,7 @@ const Search = () => {
 					curPage={curPage}
 					onClick={onClickPagination}
 					pageCnt={5}
-					maxCnt={11}
+					maxCnt={maxPage}
 				/>
 			</main>
 		</>

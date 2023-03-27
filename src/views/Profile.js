@@ -29,18 +29,22 @@ import {
 	TabPane,
 	Badge,
 	CardImg,
+	Row,
+	Col,
 } from 'reactstrap';
 
 // core components
 import classNames from 'classnames';
 import DemoNavbar from 'components/Navbars/DemoNavbar';
 import BookInfoViewList from 'components/List/BookInfoList';
+import dashboardRouteInfo from 'routes';
 
 const reviewPromiseFunc = () => {
 	return new Promise(res => {
 		setTimeout(() => {
 			res(
 				Array.from({ length: 13 }, (_, i) => ({
+					isbn: i,
 					title: `이름${i}`,
 					thumbnail: 'https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg',
 					rating: ((i + 1) / 3).toFixed(2),
@@ -71,11 +75,20 @@ const myInterestPromiseFunc = () => {
 };
 
 const MyReview = ({ reviewList }) => {
+	const detailPath = dashboardRouteInfo.detail.path.split(':')[0];
+
 	return (
 		<>
 			{reviewList.length ? (
 				reviewList.map((review, i) => (
-					<Card key={i} className="shadow shadow-lg--hover mt-5">
+					<Card
+						onClick={() => {
+							window.location.href = `${detailPath}${review.isbn}`;
+						}}
+						key={i}
+						className="shadow shadow-lg--hover mt-5"
+						style={{ cursor: 'pointer' }}
+					>
 						<CardBody>
 							<div className="d-flex px-3">
 								<div className="d-flex flex-column">
@@ -122,6 +135,7 @@ const Profile = () => {
 	const [tabs, setTabs] = useState(1);
 	const [reviewList, setReviewList] = useState([]);
 	const [interestList, setInterestList] = useState([]);
+	const title = dashboardRouteInfo.profile.name;
 
 	const toggleNavs = async index => {
 		setTabs(index);
@@ -157,6 +171,15 @@ const Profile = () => {
 							alt="..."
 						/>
 					</div>
+					<Container className="shape-container d-flex align-items-center">
+						<div className="col px-0">
+							<Row className="align-items-center justify-content-center">
+								<Col style={{ marginTop: '60px' }} className="text-center" lg="6">
+									<h1 style={{ color: 'white' }}>{title}</h1>
+								</Col>
+							</Row>
+						</div>
+					</Container>
 				</section>
 				<section>
 					<Container>
