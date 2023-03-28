@@ -37,11 +37,14 @@ import {
 import { useRecoilState } from 'recoil';
 
 import { userState } from 'recoils/user.js';
+import { setAxiosAuthorization } from 'util/auth';
+import axios from 'axios';
+import { deleteCookie } from 'util/auth';
 
 const UserButtonView = () => {
 	const [{ isLogin }, setUserState] = useRecoilState(userState);
 
-	const useUserLogin = async e => {
+	const useUserLogout = async e => {
 		e.preventDefault();
 		try {
 			const promiseFunc = () => {
@@ -53,6 +56,11 @@ const UserButtonView = () => {
 				});
 			};
 			await promiseFunc();
+			// await axios.get(`http://......./auth/logout`, {
+			// 	withCredentials: true,
+			// });
+			// setAxiosAuthorization();
+			// deleteCookie('token');
 
 			setUserState(oldState => ({
 				...oldState,
@@ -60,11 +68,7 @@ const UserButtonView = () => {
 				isLogin: false,
 			}));
 		} catch (err) {
-			setUserState(oldState => ({
-				...oldState,
-				userId: '',
-				isLogin: false,
-			}));
+			console.log(err);
 		}
 	};
 
@@ -103,7 +107,7 @@ const UserButtonView = () => {
 					<DropdownItem to="/profile" tag={Link}>
 						프로필
 					</DropdownItem>
-					<DropdownItem onClick={useUserLogin}>로그아웃</DropdownItem>
+					<DropdownItem onClick={useUserLogout}>로그아웃</DropdownItem>
 				</DropdownMenu>
 			</UncontrolledDropdown>
 		</Nav>

@@ -129,14 +129,19 @@ const Login = memo(() => {
 					});
 				};
 				const result = await promiseFunc(userInfo);
-				const { data } = axios.post(`http://......./auth/token`, userInfo, {
-					withCredentials: true,
-				});
-				if (data) {
-					setAxiosAuthorization(`Bearer ${data}`);
-					setCookie('token', `Bearer ${data}`);
-					// const result = jwtDecode(data);
-				}
+				// const { data } = await axios.post(`http://......./auth/token`, userInfo, {
+				// 	withCredentials: true,
+				// });
+				// if (data) {
+				// 	setAxiosAuthorization(`Bearer ${data}`);
+				// 	setCookie('token', `Bearer ${data}`);
+				// 	const result = jwtDecode(data);
+				// 	setUserState(oldState => ({
+				// 		...oldState,
+				// 		userId: result.nickname,
+				// 		isLogin: true,
+				// 	}));
+				// }
 
 				setUserState(oldState => ({
 					...oldState,
