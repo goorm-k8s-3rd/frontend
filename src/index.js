@@ -25,8 +25,14 @@ import 'assets/vendor/font-awesome/css/font-awesome.min.css';
 import 'assets/scss/argon-design-system-react.scss?v1.1.0';
 
 import DefaultLayout from 'layout/DefaultLayout.js';
+import { getCookie } from 'util/auth';
+import { setAxiosAuthorization } from 'util/auth';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const token = getCookie('token');
+setAxiosAuthorization(token);
+console.log(token);
 
 root.render(
 	<RecoilRoot>

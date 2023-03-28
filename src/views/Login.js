@@ -38,6 +38,10 @@ import { useRecoilState } from 'recoil';
 // core components
 import DemoNavbar from 'components/Navbars/DemoNavbar.js';
 import { userState } from 'recoils/user';
+import axios from 'axios';
+import jwtDecode from 'jwt-decode';
+import { setCookie } from 'util/auth';
+import { setAxiosAuthorization } from 'util/auth';
 
 const ErrorMessageView = memo(({ errorMessage }) => {
 	if (!errorMessage) return null;
@@ -125,19 +129,25 @@ const Login = memo(() => {
 					});
 				};
 				const result = await promiseFunc(userInfo);
+				const { data } = axios.post(`http://......./auth/token`, userInfo, {
+					withCredentials: true,
+				});
+				if (data) {
+					setAxiosAuthorization(`Bearer ${data}`);
+					setCookie('token', `Bearer ${data}`);
+					// const result = jwtDecode(data);
+				}
 
 				setUserState(oldState => ({
 					...oldState,
 					userId: result.nickname,
 					isLogin: true,
-					token: 'tokenss',
 				}));
 			} catch (err) {
 				setUserState(oldState => ({
 					...oldState,
 					userId: '',
 					isLogin: false,
-					token: '',
 				}));
 				setErrorMessage(err.errorMessage);
 			}
