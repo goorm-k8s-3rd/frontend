@@ -138,7 +138,7 @@ const Login = memo(() => {
 				// 	const result = jwtDecode(data);
 				// 	setUserState(oldState => ({
 				// 		...oldState,
-				// 		userId: result.nickname,
+				// 		userId: result.id,
 				// 		isLogin: true,
 				// 	}));
 				// }

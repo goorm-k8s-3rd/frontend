@@ -38,6 +38,7 @@ import classNames from 'classnames';
 import DemoNavbar from 'components/Navbars/DemoNavbar';
 import BookInfoViewList from 'components/List/BookInfoList';
 import dashboardRouteInfo from 'routes';
+import axios from 'axios';
 
 const reviewPromiseFunc = () => {
 	return new Promise(res => {
@@ -46,14 +47,13 @@ const reviewPromiseFunc = () => {
 				Array.from({ length: 13 }, (_, i) => ({
 					isbn: i,
 					title: `이름${i}`,
-					thumbnail:
-						'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6080832%3Ftimestamp%3D20230322161657',
-					url: 'https://search.daum.net/search?w=bookpage&bookId=6080832&q=%ED%98%BC%EC%9E%90+%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%ED%8C%8C%EC%9D%B4%EC%8D%AC',
 					rate: ((i + 1) / 3).toFixed(2),
-					like: i * 3,
-					dislike: i,
 					comment:
 						'리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰',
+					like: i * 3,
+					dislike: i,
+					thumbnail:
+						'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6080832%3Ftimestamp%3D20230322161657',
 				})),
 			);
 		}, 1000);
@@ -151,6 +151,9 @@ const Profile = () => {
 
 	useEffect(() => {
 		if (tabs === 1) {
+			// axios.get(`http://......./review/user`,{withCredentials: true}).then(({data}) => {
+			// 	setReviewList(data)
+			// });
 			reviewPromiseFunc().then(list => setReviewList(list));
 		} else {
 			myInterestPromiseFunc().then(list => setInterestList(list));
