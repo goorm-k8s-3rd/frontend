@@ -79,9 +79,7 @@ const likePromiseFunc = (id, isLike) => {
 	});
 };
 
-const OtherReview = ({ reviewList, onClickLike }) => {
-	const { userId } = useRecoilValue(userState);
-
+const OtherReview = ({ userId, reviewList, onClickLike }) => {
 	return (
 		<>
 			{reviewList.length ? (
@@ -148,6 +146,7 @@ const OtherReview = ({ reviewList, onClickLike }) => {
 };
 
 const Detail = ({ match }) => {
+	const { userId } = useRecoilValue(userState);
 	const [bookInfo, setBookInfo] = useState({});
 	const [rating, setRating] = useState(0);
 	const commentRef = useRef(null);
@@ -162,7 +161,6 @@ const Detail = ({ match }) => {
 			// 	{ contents: comment, rate: rating },
 			// 	{ withCredentials: true },
 			// );
-			setBookInfo({ ...bookInfo, myReview: { rating, comment } });
 			notify(notificationAlertRef, 2, '등록완료!');
 		} catch (e) {
 			console.log(e);
@@ -178,7 +176,6 @@ const Detail = ({ match }) => {
 			await deletePromiseFunc();
 			commentRef.current.value = '';
 			setRating(0);
-			setBookInfo({ ...bookInfo, myReview: {} });
 		} catch (e) {
 			console.log(e);
 			notify(notificationAlertRef, 2, '삭제오류');
@@ -272,15 +269,17 @@ const Detail = ({ match }) => {
 	useEffect(() => {
 		// axios.get(`http://......./book/${bookId}`,{withCredentials: true}).then(({data}) => {
 		// 	setBookInfo(data);
-		// 	commentRef.current.value = '123';
-		// 	setRating(data?.myReview?.rating ?? 0);
+		// 	const myInfo = data.review.filter(rev => rev.id === userId);
+		// 	commentRef.current.value = myInfo?.content ?? '';
+		// 	setRating(myInfo?.rate ?? 0);
 		// });
 		bookInfoPromiseFunc(bookId).then(result => {
 			setBookInfo(result);
-			commentRef.current.value = '123';
-			setRating(result?.myReview?.rating ?? 0);
+			const myInfo = result.review.filter(rev => rev.id === userId);
+			commentRef.current.value = myInfo?.content ?? '';
+			setRating(myInfo?.rate ?? 0);
 		});
-	}, [bookId]);
+	}, [bookId, userId]);
 
 	return (
 		<>
@@ -352,7 +351,11 @@ const Detail = ({ match }) => {
 			<section className="section bg-secondary">
 				<Container>
 					<h2>리뷰 ({bookInfo.review?.length ?? 0})</h2>
-					<OtherReview reviewList={bookInfo.review ?? []} onClickLike={onClickLike} />
+					<OtherReview
+						userId={userId}
+						reviewList={bookInfo.review ?? []}
+						onClickLike={onClickLike}
+					/>
 				</Container>
 			</section>
 		</>
