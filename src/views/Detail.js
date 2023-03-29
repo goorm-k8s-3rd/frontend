@@ -101,7 +101,7 @@ const OtherReview = ({ reviewList, onClickLike }) => {
 											pill
 											className="mr-1"
 											onClick={() => {
-												onClickLike(true, i);
+												onClickLike(userReview.id, true, i);
 											}}
 											style={{ cursor: 'pointer' }}
 										>
@@ -116,7 +116,7 @@ const OtherReview = ({ reviewList, onClickLike }) => {
 											pill
 											className="mr-1"
 											onClick={() => {
-												onClickLike(false, i);
+												onClickLike(userReview.id, false, i);
 											}}
 											style={{ cursor: 'pointer' }}
 										>
@@ -152,10 +152,16 @@ const Detail = ({ match }) => {
 	const [rating, setRating] = useState(0);
 	const commentRef = useRef(null);
 	const notificationAlertRef = useRef(null);
+	const bookId = match.params.id;
 
 	const onSubmitContent = async comment => {
 		try {
 			await commentPromiseFunc(comment);
+			// await axios.post(
+			// 	`http://......./review/${bookId}/create`,
+			// 	{ contents: comment, rate: rating },
+			// 	{ withCredentials: true },
+			// );
 			setBookInfo({ ...bookInfo, myReview: { rating, comment } });
 			notify(notificationAlertRef, 2, '등록완료!');
 		} catch (e) {
@@ -166,43 +172,97 @@ const Detail = ({ match }) => {
 
 	const onClickDelete = async () => {
 		try {
+			// await axios.delete(`http://......./review/${bookId}/delete`, {
+			// 	withCredentials: true,
+			// });
 			await deletePromiseFunc();
+			commentRef.current.value = '';
 			setRating(0);
 			setBookInfo({ ...bookInfo, myReview: {} });
 		} catch (e) {
 			console.log(e);
+			notify(notificationAlertRef, 2, '삭제오류');
 		}
 	};
 
-	const onClickLike = async (isLike, idx) => {
+	const onClickLike = async (id, isLike, idx) => {
 		try {
 			const review = [...bookInfo?.review];
 			if (!review[idx]) {
 				throw Error('해당 인덱스가 없습니다');
 			}
 			await likePromiseFunc(review[idx].id, isLike);
+			const clickInfo = {
+				none: {
+					like: async () => {
+						// await axios.get(`http://......./review/${bookId}/like`, {
+						// 	params: { id },
+						// 	withCredentials: true,
+						// });
+						review[idx].userCheck = 2;
+						review[idx].like += 1;
+					},
+					dislike: async () => {
+						// await axios.get(`http://......./review/${bookId}/dislike`, {
+						// 	params: { id },
+						// 	withCredentials: true,
+						// });
+						review[idx].userCheck = 3;
+						review[idx].dislike += 1;
+					},
+				},
+				like: {
+					like: async () => {
+						// await axios.delete(`http://......./review/${bookId}/like`, {
+						// 	data: { id },
+						// 	withCredentials: true,
+						// });
+						review[idx].like -= 1;
+						review[idx].userCheck = 1;
+					},
+					dislike: async () => {
+						// await axios.get(`http://......./review/${bookId}/dislike`, {
+						// 	params: { id },
+						// 	withCredentials: true,
+						// });
+						review[idx].dislike += 1;
+						review[idx].like -= 1;
+						review[idx].userCheck = 3;
+					},
+				},
+				dislike: {
+					like: async () => {
+						// await axios.get(`http://......./review/${bookId}/like`, {
+						// 	params: { id },
+						// 	withCredentials: true,
+						// });
+						review[idx].dislike -= 1;
+						review[idx].like += 1;
+						review[idx].userCheck = 2;
+					},
+					dislike: async () => {
+						// await axios.delete(`http://......./review/${bookId}/like`, {
+						// 	params: { id },
+						// 	withCredentials: true,
+						// });
+						review[idx].dislike -= 1;
+						review[idx].userCheck = 1;
+					},
+				},
+			};
 
-			const beforeLike = review[idx].userCheck;
-			review[idx].userCheck = isLike ? 2 : 3;
-			/** 아무것도 안누른 상태 */
-			if (beforeLike === 1) {
-				review[idx][isLike ? 'like' : 'dislike'] += 1;
-			} else {
-				/** 무언가가 눌려진 상태에서 기존의 상태를 제거 */
-				review[idx][beforeLike === 2 ? 'like' : 'dislike'] -= 1;
-				/** 좋아요에서 싫어요를 누른 경우 */
-				if (beforeLike === 2 && !isLike) {
-					review[idx].dislike += 1;
-				} else if (beforeLike === 3 && isLike) {
-					/** 싫어요에서 좋아요를 누른 경우 */
-					review[idx].like += 1;
-				} else if ((beforeLike === 2 && isLike) || (beforeLike === 3 && !isLike)) {
-					/** 같은 버튼을 연속해서 누른 경우 */
-					review[idx].userCheck = 1;
-				}
+			const likeStr = isLike ? 'like' : 'dislike';
+			switch (review[idx].userCheck) {
+				case 1:
+					await clickInfo.none[likeStr]();
+					break;
+				case 2:
+					await clickInfo.like[likeStr]();
+					break;
+				default:
+					await clickInfo.dislike[likeStr]();
 			}
 
-			/** 아무것도 안눌렸던 상태에서 싫어요인 경우  */
 			setBookInfo({ ...bookInfo, review });
 		} catch (e) {
 			console.log(e);
@@ -210,17 +270,17 @@ const Detail = ({ match }) => {
 	};
 
 	useEffect(() => {
-		// axios.get(`http://......./book/${match.params.id}`,{withCredentials: true}).then(({data}) => {
+		// axios.get(`http://......./book/${bookId}`,{withCredentials: true}).then(({data}) => {
 		// 	setBookInfo(data);
 		// 	commentRef.current.value = '123';
 		// 	setRating(data?.myReview?.rating ?? 0);
 		// });
-		bookInfoPromiseFunc(match.params.id).then(result => {
+		bookInfoPromiseFunc(bookId).then(result => {
 			setBookInfo(result);
 			commentRef.current.value = '123';
 			setRating(result?.myReview?.rating ?? 0);
 		});
-	}, [match.params.id]);
+	}, [bookId]);
 
 	return (
 		<>
