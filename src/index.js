@@ -32,7 +32,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const token = getCookie('token');
 setAxiosAuthorization(token);
-console.log(token);
 
 root.render(
 	<RecoilRoot>

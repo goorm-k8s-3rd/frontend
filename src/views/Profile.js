@@ -39,6 +39,7 @@ import DemoNavbar from 'components/Navbars/DemoNavbar';
 import BookInfoViewList from 'components/List/BookInfoList';
 import dashboardRouteInfo from 'routes';
 import axios from 'axios';
+import { api } from 'config';
 
 const reviewPromiseFunc = () => {
 	return new Promise(res => {
@@ -60,23 +61,23 @@ const reviewPromiseFunc = () => {
 	});
 };
 
-const myInterestPromiseFunc = () => {
-	return new Promise(res => {
-		setTimeout(() => {
-			res(
-				Array.from({ length: 13 }, (_, i) => ({
-					title: `책이름1${i}`,
-					authors: `저자${i}`,
-					thumbnail:
-						'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6080832%3Ftimestamp%3D20230322161657',
-					url: 'https://search.daum.net/search?w=bookpage&bookId=6080832&q=%ED%98%BC%EC%9E%90+%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%ED%8C%8C%EC%9D%B4%EC%8D%AC',
-					isbn: i,
-					rate: ((i + 1) / 3).toFixed(2),
-				})),
-			);
-		}, 1000);
-	});
-};
+// const myInterestPromiseFunc = () => {
+// 	return new Promise(res => {
+// 		setTimeout(() => {
+// 			res(
+// 				Array.from({ length: 13 }, (_, i) => ({
+// 					title: `책이름1${i}`,
+// 					authors: `저자${i}`,
+// 					thumbnail:
+// 						'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6080832%3Ftimestamp%3D20230322161657',
+// 					url: 'https://search.daum.net/search?w=bookpage&bookId=6080832&q=%ED%98%BC%EC%9E%90+%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%ED%8C%8C%EC%9D%B4%EC%8D%AC',
+// 					isbn: i,
+// 					rate: ((i + 1) / 3).toFixed(2),
+// 				})),
+// 			);
+// 		}, 1000);
+// 	});
+// };
 
 const MyReview = ({ reviewList }) => {
 	const detailPath = dashboardRouteInfo.detail.path.split(':')[0];
@@ -98,7 +99,7 @@ const MyReview = ({ reviewList }) => {
 								<div className="d-flex flex-column">
 									<CardImg
 										alt="..."
-										src="https://image.yes24.com/momo/TopCate0001/kepub/L_195737.jpg"
+										src={review.thumbnail}
 										style={{ height: '200px', width: '130px' }}
 									/>
 									{review.title}
@@ -119,7 +120,7 @@ const MyReview = ({ reviewList }) => {
 											marginBottom: '10px',
 										}}
 									/>
-									<p>{review.comment}</p>
+									<p>{review.contents}</p>
 								</div>
 							</div>
 						</CardBody>
@@ -138,7 +139,7 @@ const Profile = () => {
 	const mainRef = useRef(null);
 	const [tabs, setTabs] = useState(1);
 	const [reviewList, setReviewList] = useState([]);
-	const [interestList, setInterestList] = useState([]);
+	// const [interestList, setInterestList] = useState([]);
 	const title = dashboardRouteInfo.profile.name;
 
 	const toggleNavs = async index => {
@@ -151,13 +152,13 @@ const Profile = () => {
 
 	useEffect(() => {
 		if (tabs === 1) {
-			// axios.get(`http://......./review/user`,{withCredentials: true}).then(({data}) => {
-			// 	setReviewList(data)
-			// });
-			reviewPromiseFunc().then(list => setReviewList(list));
-		} else {
-			myInterestPromiseFunc().then(list => setInterestList(list));
+			axios.get(`${api}/review/user`).then(({ data }) => {
+				setReviewList(data);
+			});
 		}
+		// else {
+		// 	myInterestPromiseFunc().then(list => setInterestList(list));
+		// }
 	}, [tabs]);
 
 	useEffect(() => {
@@ -214,7 +215,7 @@ const Profile = () => {
 											<i className="ni ni-cloud-upload-96 mr-2" />내 리뷰
 										</NavLink>
 									</NavItem>
-									<NavItem>
+									{/* <NavItem>
 										<NavLink
 											aria-selected={tabs === 2}
 											className={classNames('mb-sm-3 mb-md-0', {
@@ -230,7 +231,7 @@ const Profile = () => {
 											<i className="ni ni-bell-55 mr-2" />
 											관심 작품
 										</NavLink>
-									</NavItem>
+									</NavItem> */}
 								</Nav>
 								<Card className="shadow">
 									<CardBody>
@@ -238,9 +239,9 @@ const Profile = () => {
 											<TabPane tabId="tabs1">
 												<MyReview reviewList={reviewList} />
 											</TabPane>
-											<TabPane tabId="tabs2">
+											{/* <TabPane tabId="tabs2">
 												<BookInfoViewList bookList={interestList} rowPerCnt={4} />
-											</TabPane>
+											</TabPane> */}
 										</TabContent>
 									</CardBody>
 								</Card>

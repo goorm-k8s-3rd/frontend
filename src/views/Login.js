@@ -39,9 +39,9 @@ import { useRecoilState } from 'recoil';
 import DemoNavbar from 'components/Navbars/DemoNavbar.js';
 import { userState } from 'recoils/user';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
 import { setCookie } from 'util/auth';
 import { setAxiosAuthorization } from 'util/auth';
+import { api } from 'config';
 
 const ErrorMessageView = memo(({ errorMessage }) => {
 	if (!errorMessage) return null;
@@ -62,16 +62,10 @@ const FormDataView = memo(({ onChange }) => {
 				<InputGroup className="input-group-alternative">
 					<InputGroupAddon addonType="prepend">
 						<InputGroupText>
-							<i className="ni ni-email-83" />
+							<i className="ni ni-circle-08" />
 						</InputGroupText>
 					</InputGroupAddon>
-					<Input
-						placeholder="Email"
-						type="email"
-						name="email"
-						onChange={onChange}
-						required
-					/>
+					<Input placeholder="id" name="username" onChange={onChange} required />
 				</InputGroup>
 			</FormGroup>
 			<FormGroup>
@@ -103,7 +97,7 @@ const Login = memo(() => {
 		window.location.href = '/';
 	}
 	const [userInfo, setUserInfo] = useState({
-		email: '',
+		username: '',
 		password: '',
 	});
 	const [errorMessage, setErrorMessage] = useState('');
@@ -119,42 +113,25 @@ const Login = memo(() => {
 		async e => {
 			e.preventDefault();
 			try {
-				const promiseFunc = userInfo => {
-					console.log(userInfo);
-					return new Promise((resolve, reject) => {
-						setTimeout(() => {
-							resolve({ code: 200, nickname: '하이' });
-							// reject({ code: 400, errorMessage: '에러내용' });
-						}, 2000);
-					});
-				};
-				const result = await promiseFunc(userInfo);
-				// const { data } = await axios.post(`http://......./auth/token`, userInfo, {
-				// 	withCredentials: true,
-				// });
-				// if (data) {
-				// 	setAxiosAuthorization(`Bearer ${data}`);
-				// 	setCookie('token', `Bearer ${data}`);
-				// 	const result = jwtDecode(data);
-				// 	setUserState(oldState => ({
-				// 		...oldState,
-				// 		userId: result.id,
-				// 		isLogin: true,
-				// 	}));
-				// }
-
-				setUserState(oldState => ({
-					...oldState,
-					userId: result.nickname,
-					isLogin: true,
-				}));
+				const { data } = await axios.post(`${api}/auth/token`, userInfo, {
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				});
+				if (data) {
+					setAxiosAuthorization(`${data.token_type} ${data.access_token}`);
+					setCookie('token', `${data.token_type} ${data.access_token}`);
+					setUserState(oldState => ({
+						...oldState,
+						userId: userInfo.username,
+						isLogin: true,
+					}));
+				}
 			} catch (err) {
 				setUserState(oldState => ({
 					...oldState,
 					userId: '',
 					isLogin: false,
 				}));
-				setErrorMessage(err.errorMessage);
+				setErrorMessage(err?.response?.data?.msg ?? '');
 			}
 		},
 		[userInfo],

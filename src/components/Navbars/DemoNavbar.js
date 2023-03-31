@@ -38,7 +38,6 @@ import { useRecoilState } from 'recoil';
 
 import { userState } from 'recoils/user.js';
 import { setAxiosAuthorization } from 'util/auth';
-import axios from 'axios';
 import { deleteCookie } from 'util/auth';
 
 const UserButtonView = () => {
@@ -47,26 +46,15 @@ const UserButtonView = () => {
 	const useUserLogout = async e => {
 		e.preventDefault();
 		try {
-			const promiseFunc = () => {
-				return new Promise((resolve, reject) => {
-					setTimeout(() => {
-						resolve({ code: 200 });
-						// reject({ code: 400, errorMessage: '에러내용' });
-					}, 1000);
-				});
-			};
-			await promiseFunc();
-			// await axios.get(`http://......./auth/logout`, {
-			// 	withCredentials: true,
-			// });
-			// setAxiosAuthorization();
-			// deleteCookie('token');
+			setAxiosAuthorization();
+			deleteCookie('token');
 
 			setUserState(oldState => ({
 				...oldState,
 				userId: '',
 				isLogin: false,
 			}));
+			window.location.href = '/';
 		} catch (err) {
 			console.log(err);
 		}

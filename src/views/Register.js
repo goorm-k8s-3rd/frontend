@@ -39,6 +39,7 @@ import DemoNavbar from 'components/Navbars/DemoNavbar.js';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoils/user';
 import axios from 'axios';
+import { api } from 'config';
 
 const ErrorMessageView = ({ errorMessage }) => {
 	if (!errorMessage) return null;
@@ -91,7 +92,7 @@ const FormDataView = ({ onChange }) => {
 					<Input
 						placeholder="Password"
 						type="password"
-						name="pw"
+						name="password"
 						autoComplete="off"
 						onChange={onChange}
 						required
@@ -113,7 +114,7 @@ const Register = () => {
 	const [userInfo, setUserInfo] = useState({
 		id: '',
 		email: '',
-		pw: '',
+		password: '',
 	});
 	const [errorMessage, setErrorMessage] = useState('');
 
@@ -125,19 +126,7 @@ const Register = () => {
 	const useUserLogin = async e => {
 		e.preventDefault();
 		try {
-			const promiseFunc = userInfo => {
-				console.log(userInfo);
-				return new Promise((resolve, reject) => {
-					setTimeout(() => {
-						// resolve({ code: 200, nickname: '하이' });
-						reject({ code: 400, errorMessage: '에러내용' });
-					}, 2000);
-				});
-			};
-			await promiseFunc(userInfo);
-			// await axios.post(`http://......./auth/register`, userInfo, {
-			// 	withCredentials: true,
-			// });
+			await axios.post(`${api}/auth/register`, userInfo);
 
 			window.location.href = '/login';
 		} catch (err) {

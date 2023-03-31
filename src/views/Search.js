@@ -20,25 +20,7 @@ import axios from 'axios';
 import DemoNavbar from 'components/Navbars/DemoNavbar.js';
 import PaginationComponent from 'components/Pagination/Pagination';
 import BookInfoViewList from 'components/List/BookInfoList';
-
-const promiseFunc = (name, num) => {
-	// return axios.get(`http://......./book/search/${name}`,{withCredentials: true})
-	return new Promise(res => {
-		setTimeout(() => {
-			res(
-				Array.from({ length: 13 }, (_, i) => ({
-					title: `${name}${i * num}`,
-					authors: `저자${i * num}`,
-					thumbnail:
-						'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6080832%3Ftimestamp%3D20230322161657',
-					url: 'https://search.daum.net/search?w=bookpage&bookId=6080832&q=%ED%98%BC%EC%9E%90+%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%ED%8C%8C%EC%9D%B4%EC%8D%AC',
-					isbn: i,
-					rate: ((i + 1) / 3).toFixed(2),
-				})),
-			);
-		}, 1000);
-	});
-};
+import { api } from 'config';
 
 const Search = () => {
 	const mainRef = useRef(null);
@@ -50,8 +32,8 @@ const Search = () => {
 	const onSubmitTitle = async name => {
 		try {
 			setBookName(name);
-			const result = await promiseFunc(name, curPage);
-			setBookList(result);
+			const { data } = await axios.get(`${api}/book/search/${name}`);
+			setBookList(data.data);
 			setMaxPage(11);
 		} catch (e) {
 			console.log(e);
@@ -61,7 +43,7 @@ const Search = () => {
 	const onClickPagination = async num => {
 		try {
 			setCurPage(num);
-			const result = await promiseFunc(bookName, num);
+			const result = await axios.get(`${api}/book/search/${bookName}`);
 			setBookList(result);
 		} catch (e) {
 			console.log(e);
