@@ -21,6 +21,7 @@ import DemoNavbar from 'components/Navbars/DemoNavbar.js';
 import PaginationComponent from 'components/Pagination/Pagination';
 import BookInfoViewList from 'components/List/BookInfoList';
 import { api } from 'config';
+import { deleteExpiredToken } from 'util/auth';
 
 const Search = () => {
 	const mainRef = useRef(null);
@@ -36,6 +37,7 @@ const Search = () => {
 			setBookList(data.data);
 			setMaxPage(11);
 		} catch (e) {
+			deleteExpiredToken(e);
 			console.log(e);
 		}
 	};
@@ -46,6 +48,7 @@ const Search = () => {
 			const result = await axios.get(`${api}/book/search/${bookName}`);
 			setBookList(result);
 		} catch (e) {
+			deleteExpiredToken(e);
 			console.log(e);
 		}
 	};

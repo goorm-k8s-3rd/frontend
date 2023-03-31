@@ -40,6 +40,7 @@ import BookInfoViewList from 'components/List/BookInfoList';
 import dashboardRouteInfo from 'routes';
 import axios from 'axios';
 import { api } from 'config';
+import { deleteExpiredToken } from 'util/auth';
 
 const reviewPromiseFunc = () => {
 	return new Promise(res => {
@@ -152,9 +153,14 @@ const Profile = () => {
 
 	useEffect(() => {
 		if (tabs === 1) {
-			axios.get(`${api}/review/user`).then(({ data }) => {
-				setReviewList(data);
-			});
+			axios
+				.get(`${api}/review/user`)
+				.then(({ data }) => {
+					setReviewList(data);
+				})
+				.catch(err => {
+					deleteExpiredToken(err);
+				});
 		}
 		// else {
 		// 	myInterestPromiseFunc().then(list => setInterestList(list));

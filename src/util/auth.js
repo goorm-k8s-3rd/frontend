@@ -22,3 +22,11 @@ export const setAxiosAuthorization = data => {
 		delete axios.defaults.headers.common['Authorization'];
 	}
 };
+
+export const deleteExpiredToken = error => {
+	if (error?.response?.status === 404) {
+		setAxiosAuthorization();
+		deleteCookie('token');
+		window.location.href = '/';
+	}
+};

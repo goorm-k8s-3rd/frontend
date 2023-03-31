@@ -18,6 +18,7 @@ import axios from 'axios';
 import { userState } from 'recoils/user';
 import { notify } from 'util';
 import { api } from 'config';
+import { deleteExpiredToken } from 'util/auth';
 
 const OtherReview = ({ userId, reviewList, onClickLike }) => {
 	const filteredList = reviewList.filter(userReview => userReview.id !== userId);
@@ -102,6 +103,7 @@ const Detail = ({ match }) => {
 			notify(notificationAlertRef, 2, '등록완료!');
 		} catch (e) {
 			console.log(e);
+			deleteExpiredToken(e);
 			notify(notificationAlertRef, 3, e);
 		}
 	};
@@ -113,6 +115,7 @@ const Detail = ({ match }) => {
 			setRating(0);
 		} catch (e) {
 			console.log(e);
+			deleteExpiredToken(e);
 			notify(notificationAlertRef, 2, '삭제오류');
 		}
 	};
@@ -191,18 +194,24 @@ const Detail = ({ match }) => {
 			setBookInfo({ ...bookInfo, review });
 		} catch (e) {
 			console.log(e);
+			deleteExpiredToken(e);
 		}
 	};
 
 	useEffect(() => {
-		axios.get(`${api}/book/${bookId}`).then(({ data }) => {
-			setBookInfo(data);
-			const myInfo = (data?.review ?? []).filter(rev => rev.id === userId);
-			if (myInfo.length > 0) {
-				commentRef.current.value = myInfo[0].contents;
-				setRating(+myInfo[0].rate);
-			}
-		});
+		axios
+			.get(`${api}/book/${bookId}`)
+			.then(({ data }) => {
+				setBookInfo(data);
+				const myInfo = (data?.review ?? []).filter(rev => rev.id === userId);
+				if (myInfo.length > 0) {
+					commentRef.current.value = myInfo[0].contents;
+					setRating(+myInfo[0].rate);
+				}
+			})
+			.catch(err => {
+				deleteExpiredToken(err);
+			});
 	}, [bookId, userId]);
 
 	return (
