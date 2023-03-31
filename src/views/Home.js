@@ -16,7 +16,6 @@ const Hero = () => {
 		axios
 			.get(`${api}/book/recent`)
 			.then(({ data }) => {
-				console.log(data);
 				setRecentList(data);
 			})
 			.catch(err => {
