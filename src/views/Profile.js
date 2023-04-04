@@ -36,7 +36,7 @@ import {
 // core components
 import classNames from 'classnames';
 import DemoNavbar from 'components/Navbars/DemoNavbar';
-import BookInfoViewList from 'components/List/BookInfoList';
+// import BookInfoViewList from 'components/List/BookInfoList';
 import dashboardRouteInfo from 'routes';
 import axios from 'axios';
 import { api } from 'config';

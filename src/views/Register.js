@@ -40,7 +40,6 @@ import { useRecoilValue } from 'recoil';
 import { userState } from 'recoils/user';
 import axios from 'axios';
 import { api } from 'config';
-import { deleteExpiredToken } from 'util/auth';
 
 const ErrorMessageView = ({ errorMessage }) => {
 	if (!errorMessage) return null;

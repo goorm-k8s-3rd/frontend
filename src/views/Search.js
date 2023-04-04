@@ -18,7 +18,7 @@ import axios from 'axios';
 
 // core components
 import DemoNavbar from 'components/Navbars/DemoNavbar.js';
-import PaginationComponent from 'components/Pagination/Pagination';
+// import PaginationComponent from 'components/Pagination/Pagination';
 import BookInfoViewList from 'components/List/BookInfoList';
 import { api } from 'config';
 import { deleteExpiredToken } from 'util/auth';
@@ -26,38 +26,39 @@ import { deleteExpiredToken } from 'util/auth';
 const Search = () => {
 	const mainRef = useRef(null);
 	const [bookList, setBookList] = useState([]);
-	const [curPage, setCurPage] = useState(1);
-	const [maxPage, setMaxPage] = useState(1);
-	const [bookName, setBookName] = useState('');
+	// const [curPage, setCurPage] = useState(1);
+	// const [maxPage, setMaxPage] = useState(1);
+	// const [bookName, setBookName] = useState('');
 
 	const onSubmitTitle = async name => {
 		try {
-			setBookName(name);
+			// setBookName(name);
 			const { data } = await axios.get(`${api}/book/search/${name}`);
 			setBookList(data.data);
-			setMaxPage(11);
+			// setMaxPage(11);
 		} catch (e) {
 			deleteExpiredToken(e);
 			console.log(e);
 		}
 	};
 
-	const onClickPagination = async num => {
-		try {
-			setCurPage(num);
-			const result = await axios.get(`${api}/book/search/${bookName}`);
-			setBookList(result);
-		} catch (e) {
-			deleteExpiredToken(e);
-			console.log(e);
-		}
-	};
+	// const onClickPagination = async num => {
+	// 	try {
+	// 		setCurPage(num);
+	// 		const result = await axios.get(`${api}/book/search/${bookName}`);
+	// 		setBookList(result);
+	// 	} catch (e) {
+	// 		deleteExpiredToken(e);
+	// 		console.log(e);
+	// 	}
+	// };
 
 	useEffect(() => {
 		document.documentElement.scrollTop = 0;
 		document.scrollingElement.scrollTop = 0;
 		mainRef.current.scrollTop = 0;
-	}, [curPage]);
+	}, []);
+	// curPage
 
 	return (
 		<>

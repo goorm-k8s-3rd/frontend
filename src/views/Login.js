@@ -109,33 +109,30 @@ const Login = memo(() => {
 		[userInfo],
 	);
 
-	const useUserLogin = useCallback(
-		async e => {
-			e.preventDefault();
-			try {
-				const { data } = await axios.post(`${api}/auth/token`, userInfo, {
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				});
-				if (data) {
-					setAxiosAuthorization(`${data.token_type} ${data.access_token}`);
-					setCookie('token', `${data.token_type} ${data.access_token}`);
-					setUserState(oldState => ({
-						...oldState,
-						userId: userInfo.username,
-						isLogin: true,
-					}));
-				}
-			} catch (err) {
+	const useUserLogin = async e => {
+		e.preventDefault();
+		try {
+			const { data } = await axios.post(`${api}/auth/token`, userInfo, {
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			});
+			if (data) {
+				setAxiosAuthorization(`${data.token_type} ${data.access_token}`);
+				setCookie('token', `${data.token_type} ${data.access_token}`);
 				setUserState(oldState => ({
 					...oldState,
-					userId: '',
-					isLogin: false,
+					userId: userInfo.username,
+					isLogin: true,
 				}));
-				setErrorMessage(err?.response?.data?.msg ?? '');
 			}
-		},
-		[userInfo],
-	);
+		} catch (err) {
+			setUserState(oldState => ({
+				...oldState,
+				userId: '',
+				isLogin: false,
+			}));
+			setErrorMessage(err?.response?.data?.msg ?? '');
+		}
+	};
 
 	useEffect(() => {
 		document.documentElement.scrollTop = 0;
