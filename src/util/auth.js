@@ -51,4 +51,3 @@ export const deleteExpiredToken = error => {
 		window.location.href = '/';
 	}
 };
-Footer;
