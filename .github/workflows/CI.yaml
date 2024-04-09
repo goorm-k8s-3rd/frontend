@@ -6,7 +6,7 @@ on:
       - master
 env:
   AWS_REGION: ap-northeast-2
-  REGISTRY: 596401894998.dkr.ecr.ap-northeast-2.amazonaws.com
+  REGISTRY: 339712814374.dkr.ecr.ap-northeast-2.amazonaws.com
   REPOSITORY: book-network
   IMAGE_TAG: front
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
